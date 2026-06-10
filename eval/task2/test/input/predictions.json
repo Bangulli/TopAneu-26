@@ -1,0 +1,254 @@
+[
+    {
+        "pk": "a7ca1b5d-ae1b-4c8f-b118-12b97f830d79",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "b7870faa-6538-4ff2-8f10-b4d62d3061d2",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "0426ba9e-491a-4091-811e-0093fe733a5b",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "3d307374-969c-406d-8593-199d2de95f2b",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "af982172-b815-4c6b-b33a-f035775a205d",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "2cf93eda-7bbf-43ec-880e-4729a33f4e8e",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    }
+]

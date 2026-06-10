@@ -1,0 +1,284 @@
+[
+    {
+        "pk": "6ac2cca1-84ef-4ff4-a46b-d22c6dd45270",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "05e60bf4-1fa9-41ce-b43b-b3b9eeddef8c",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "942efe05-2834-486c-a1d3-e20504c46fc3",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "05da3fc9-b67c-434f-af72-6383067a27f1",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "c2526b1e-f567-4f30-b3c7-6373a3859932",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "adcd0001-6dfb-4323-b4fe-bd9d1b74ae1e",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "detected-aneurysm-locations",
+                    "relative_path": "detected-aneurysm-locations.json",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    }
+]
