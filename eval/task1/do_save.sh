@@ -6,7 +6,7 @@ set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Set default container name
-DOCKER_IMAGE_TAG="example-evaluation-preliminary-docker-evaluation-sanity-check"
+DOCKER_IMAGE_TAG="topaneu-26-task1-evaluation"
 
 echo ""
 echo "= STEP 1 = (Re)build the image"
@@ -46,7 +46,7 @@ echo "= STEP 3 = Packing the ground truth"
 echo "This can take a while."
 output_tarball_name="${SCRIPT_DIR}/ground_truth.tar.gz"
 
-tar -czf $output_tarball_name -C "${SCRIPT_DIR}/ground_truth" .
+tar -czf "$output_tarball_name" -C "${SCRIPT_DIR}/ground_truth" .
 printf "Saved as: \e[32mground_truth.tar.gz\e[0m\n"
 
 echo "==== Done"

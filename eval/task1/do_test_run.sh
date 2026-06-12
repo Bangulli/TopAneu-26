@@ -4,7 +4,7 @@
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-DOCKER_IMAGE_TAG="example-evaluation-preliminary-docker-evaluation-sanity-check"
+DOCKER_IMAGE_TAG="topaneu-26-task1-evaluation"
 
 DOCKER_NOOP_VOLUME="${DOCKER_IMAGE_TAG}-volume"
 
@@ -64,7 +64,7 @@ echo "=+= Doing a forward pass"
 #   is added because on Grand Challenge this directory cannot be used to store permanent files
 # '--volume ../ground_truth:/opt/ml/input/data/ground_truth:ro'
 #   is added to provide access to the (optional) tarball-upload locally
-docker run --rm --gpus all \
+docker run --rm \
     --platform=linux/amd64 \
     --network none \
     --volume "$INPUT_DIR":/input:ro \

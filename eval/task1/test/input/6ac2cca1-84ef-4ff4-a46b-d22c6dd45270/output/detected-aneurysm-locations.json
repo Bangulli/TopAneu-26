@@ -1,4 +1,6 @@
 {
-    "key": "value",
-    "None": null
+    "locations": [
+        6,
+        7
+    ]
 }
