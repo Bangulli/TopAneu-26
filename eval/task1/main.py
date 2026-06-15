@@ -34,7 +34,7 @@ import random
 from pathlib import Path
 from pprint import pformat
 from statistics import mean
-from evaluate import evaluation_function
+from evaluate import evaluation_function, evaluation_aggregation, evaluation_average
 from helpers import run_prediction_processing, setup_logger, tree
 
 logger = logging.getLogger("evaluate")
@@ -98,9 +98,8 @@ def main():
     # We have the results per prediction, we can aggregate the results and
     # generate an overall score(s) for this submission
     if metrics["results"]:
-        metrics["aggregates"] = {
-            "my_metric": mean(result["metrics"] for result in metrics["results"])
-        }
+        metrics["aggregates_per_locations"] = evaluation_aggregation(metrics["results"])
+        metrics["aggregates_avg"] = evaluation_average(metrics["aggregates_per_locations"])
 
     # Make sure to save the metrics
     write_metrics(metrics=metrics)
