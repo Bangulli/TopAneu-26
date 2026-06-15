@@ -4,7 +4,7 @@
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-DOCKER_IMAGE_TAG="example-evaluation-task-2-preliminary-docker-evaluation-sanity-check"
+DOCKER_IMAGE_TAG="topaneu-26-task2-evaluation"
 
 docker build \
   --platform=linux/amd64 \

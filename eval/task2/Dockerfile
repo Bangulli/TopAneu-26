@@ -22,8 +22,9 @@ RUN python -m pip install \
 
 COPY --chown=user:user helpers.py /opt/app/
 COPY --chown=user:user evaluate.py /opt/app/
+COPY --chown=user:user main.py /opt/app/
 
 # Setting this will limit the number of workers used by the evaluate.py
 ENV GRAND_CHALLENGE_MAX_WORKERS=
 
-ENTRYPOINT ["python", "evaluate.py"]
+ENTRYPOINT ["python", "main.py"]
