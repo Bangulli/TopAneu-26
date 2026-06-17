@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def load_gt(fn):
-    dir = Path("/opt/ml/input/data/ground_truth/labels")
+    dir = Path("/opt/ml/input/data/ground_truth/location_jsons")
     with open(dir/fn.replace("_0000.nii.gz", ".json"), "r") as f:
         ref = json.load(f)
     return ref
