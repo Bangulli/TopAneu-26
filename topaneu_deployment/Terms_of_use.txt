@@ -1,0 +1,24 @@
+Specification of the terms of data use of the TopAneu 2026 challenge released data:
+
+* Following the definitions of "https://opendata.swiss/en/terms-of-use" on open data use, the following license is chosen:
+
+"Terms of data use:
+
+    Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.
+
+        * You may use this dataset for non-commercial purposes.
+
+        * You may use this dataset for commercial purposes, but you must seek prior permission from the data owner.
+
+        * You must provide the source (author, title and link to the dataset)."
+
+The data owners are the institutions contributing data to the TopAneu 2026 challenge, including:
+
+    * Lausanne University Hospital, CHUV, Switzerland
+    * Geneva University Hospitals, HUG, Switzerland
+    * University Medical Center Utrecht, UMCU, The Netherlands
+    * Mie Chuo Medical Center, Japan
+
+The resulting publications or pre-prints of the TopAneu 2026 challenge will serve as reference for data citation.
+
+By downloading the data, users agree to these terms of data use.

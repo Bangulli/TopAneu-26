@@ -1,0 +1,8 @@
+{
+    "labels": {
+        "background": 0,
+        "saccular": 1,
+        "dissecting": 2,
+        "fusiform": 3
+    }
+}
