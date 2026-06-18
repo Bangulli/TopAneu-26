@@ -20,26 +20,31 @@ That would result in:
 
 ## Metrics
 **Precision** is computed for every class using:
+
 $$
 \text{Precision} = \frac{TP}{TP + FP}
 $$
 
 **Recall** is computed for every class using:
+
 $$
 \text{Recall} = \frac{TP}{TP + FN}
 $$
 
 **MCC** is computed for every class using:
+
 $$
-\text{MCC} = \frac{TN*TP-FN*FP}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\text{MCC} = \frac{TN \times TP - FN \times FP}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
 $$
 
 **DSC** is computed for every class using:
+
 $$
-\text{DSC} = \frac{2*\lvert A \cap B \rvert}{\lvert A \rvert+\lvert B \rvert}
+\text{DSC} = \frac{2 \times \lvert A \cap B \rvert}{\lvert A \rvert+\lvert B \rvert}
 $$
 
 **VS** is computed for every class using:
+
 $$
 \text{VS} = 1-\frac{\lvert \lvert A \rvert-\lvert B \rvert\rvert}{\lvert A\rvert+\lvert B\rvert}
 $$
