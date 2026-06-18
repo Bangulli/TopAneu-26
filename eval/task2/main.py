@@ -39,7 +39,7 @@ from statistics import mean
 import SimpleITK
 from helpers import run_prediction_processing, setup_logger, tree
 
-from evaluate import evaluation_function
+from evaluate import evaluation_function, evaluation_aggregation, evaluation_average
 
 logger = logging.getLogger("evaluate")
 
@@ -99,12 +99,9 @@ def main():
     # Use concurrent workers to process the predictions more efficiently
     metrics["results"] = run_prediction_processing(fn=process, predictions=predictions)
 
-    # # We have the results per prediction, we can aggregate the results and
-    # # generate an overall score(s) for this submission
-    # if metrics["results"]:
-    #     metrics["aggregates"] = {
-    #         "my_metric": mean(result["my_metric"] for result in metrics["results"])
-    #     }
+    if metrics["results"]:
+        metrics["aggregates_per_locations"] = evaluation_aggregation(metrics["results"])
+        metrics["aggregates_avg"] = evaluation_average(metrics["aggregates_per_locations"])
 
     # Make sure to save the metrics
     write_metrics(metrics=metrics)

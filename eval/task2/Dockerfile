@@ -25,6 +25,8 @@ COPY --chown=user:user evaluate.py /opt/app/
 COPY --chown=user:user main.py /opt/app/
 
 # Setting this will limit the number of workers used by the evaluate.py
-ENV GRAND_CHALLENGE_MAX_WORKERS=
+# In the task 2 evaluation this is very important to set, because it is a memory intensive computation.
+# its 20 GB for two workers with 250x250x250 voxels.
+ENV GRAND_CHALLENGE_MAX_WORKERS=10
 
 ENTRYPOINT ["python", "main.py"]

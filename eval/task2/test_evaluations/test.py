@@ -2,6 +2,7 @@ import json, shutil, os, subprocess, random, uuid
 from pathlib import Path
 import SimpleITK as sitk
 import numpy as np
+from scipy.ndimage import label, binary_erosion, binary_dilation, generate_binary_structure
 
 def get_object(diameter):
     arr = np.zeros((diameter, diameter, diameter), dtype=bool)
@@ -39,6 +40,32 @@ def generate_mha(fn, value="random"):
     else:
         virtual_image = np.zeros((250,250,250))
         
+    virtual_image = sitk.GetImageFromArray(virtual_image)
+    sitk.WriteImage(
+        virtual_image,
+        fn,
+        useCompression=True,
+    )
+    
+def random_morph(img):
+    margin = random.choice(range(3, 21))
+    dec = random.choice(1, 2)
+    if dec == 1:
+        return binary_dilation(img, structure=generate_binary_structure(3, margin))
+    else:
+        return binary_erosion(img, structure=generate_binary_structure(3, margin))
+    
+def generate_mha_like(fn, ref, value="random", mutate=True):
+    if value != "zeros":
+        cc, n = label(ref)
+        virtual_image = np.zeros_like(ref)
+        for i in range(n):
+            struct = random_morph(cc==i) if mutate else cc==i
+            if value == "random": struct *= random.choice(range(1,51))
+            elif value == "ones": struct *= 1
+            elif value == "match": struct *= np.median(ref[cc==i])
+            virtual_image += struct
+    else: virtual_image = np.zeros_like(ref)
     virtual_image = sitk.GetImageFromArray(virtual_image)
     sitk.WriteImage(
         virtual_image,
@@ -139,7 +166,7 @@ def generate_results_fiftyfifty():
     os.mkdir(pred_dir)
     
     predictions = []
-    gt_dir = Path("../ground_truth/location_jsons")
+    gt_dir = Path("../ground_truth/location_masks")
     for fn in os.listdir(gt_dir):
         modality = "mr" if "_mr_" in fn else "ct"
         id = str(uuid.uuid1())
@@ -148,34 +175,94 @@ def generate_results_fiftyfifty():
         
         chance = random.choice([1, 2])
         if chance == 1:
-            with open(gt_dir/fn, "r") as f:
-                cur_preds = json.load(f)  
-            os.makedirs(pred_dir/id/"output")
-            with open(pred_dir/id/"output"/"detected-aneurysm-locations.json", "w") as f:
-                json.dump(cur_preds, f, indent=4)
+            cur_img = sitk.ReadImage(gt_dir/fn)
+            os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+            sitk.WriteImage(
+                cur_img,
+                pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha",
+                useCompression=True
+            )
         else:
-            os.makedirs(pred_dir/id/"output")
-            generate_mha(pred_dir/id/"output"/"detected-aneurysm-locations.json")
+            os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+            cur_img = sitk.ReadImage(gt_dir/fn)
+            generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img))
             
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
 
-def generate_results_all_random():
+def generate_results_all_random_locations():
     pred_dir = Path("../test/input")
     if os.path.exists(pred_dir):
         shutil.rmtree(pred_dir)
     os.mkdir(pred_dir)
     
     predictions = []
-    gt_dir = Path("../ground_truth/location_jsons")
+    gt_dir = Path("../ground_truth/location_masks")
     for fn in os.listdir(gt_dir):
         modality = "mr" if "_mr_" in fn else "ct"
         id = str(uuid.uuid1())
         
         predictions.append(get_predictions_entry(id, fn, modality))
-        os.makedirs(pred_dir/id/"output")
-        generate_mha(pred_dir/id/"output"/"detected-aneurysm-locations.json")
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        generate_mha(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha")
             
+    with open(pred_dir/"predictions.json", "w") as f:
+        json.dump(predictions, f, indent=4)
+        
+def generate_results_all_random_labels():
+    pred_dir = Path("../test/input")
+    if os.path.exists(pred_dir):
+        shutil.rmtree(pred_dir)
+    os.mkdir(pred_dir)
+    
+    predictions = []
+    gt_dir = Path("../ground_truth/location_masks")
+    for fn in os.listdir(gt_dir):
+        modality = "mr" if "_mr_" in fn else "ct"
+        id = str(uuid.uuid1())
+        
+        predictions.append(get_predictions_entry(id, fn, modality))
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        cur_img = sitk.ReadImage(gt_dir/fn)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img))
+    with open(pred_dir/"predictions.json", "w") as f:
+        json.dump(predictions, f, indent=4)
+        
+def generate_results_all_random_labels_no_mutation():
+    pred_dir = Path("../test/input")
+    if os.path.exists(pred_dir):
+        shutil.rmtree(pred_dir)
+    os.mkdir(pred_dir)
+    
+    predictions = []
+    gt_dir = Path("../ground_truth/location_masks")
+    for fn in os.listdir(gt_dir):
+        modality = "mr" if "_mr_" in fn else "ct"
+        id = str(uuid.uuid1())
+        
+        predictions.append(get_predictions_entry(id, fn, modality))
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        cur_img = sitk.ReadImage(gt_dir/fn)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), mutate=False)
+    with open(pred_dir/"predictions.json", "w") as f:
+        json.dump(predictions, f, indent=4)
+        
+def generate_results_all_random_mutes():
+    pred_dir = Path("../test/input")
+    if os.path.exists(pred_dir):
+        shutil.rmtree(pred_dir)
+    os.mkdir(pred_dir)
+    
+    predictions = []
+    gt_dir = Path("../ground_truth/location_masks")
+    for fn in os.listdir(gt_dir):
+        modality = "mr" if "_mr_" in fn else "ct"
+        id = str(uuid.uuid1())
+        
+        predictions.append(get_predictions_entry(id, fn, modality))
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        cur_img = sitk.ReadImage(gt_dir/fn)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), value="match", mutate=False)
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
         
@@ -186,14 +273,15 @@ def generate_results_all_zero():
     os.mkdir(pred_dir)
     
     predictions = []
-    gt_dir = Path("../ground_truth/location_jsons")
+    gt_dir = Path("../ground_truth/location_masks")
     for fn in os.listdir(gt_dir):
         modality = "mr" if "_mr_" in fn else "ct"
         id = str(uuid.uuid1())
         
         predictions.append(get_predictions_entry(id, fn, modality))
-        os.makedirs(pred_dir/id/"output")
-        generate_mha(pred_dir/id/"output"/"detected-aneurysm-locations.json", "zero")
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        cur_img = sitk.ReadImage(gt_dir/fn)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), value="zero")
             
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
@@ -205,38 +293,73 @@ def generate_results_all_one():
     os.mkdir(pred_dir)
     
     predictions = []
-    gt_dir = Path("../ground_truth/location_jsons")
+    gt_dir = Path("../ground_truth/location_masks")
     for fn in os.listdir(gt_dir):
         modality = "mr" if "_mr_" in fn else "ct"
         id = str(uuid.uuid1())
         
         predictions.append(get_predictions_entry(id, fn, modality))
-        os.makedirs(pred_dir/id/"output")
-        generate_mha(pred_dir/id/"output"/"detected-aneurysm-locations.json", "one")
+        os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
+        cur_img = sitk.ReadImage(gt_dir/fn)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), value="one")
+        
             
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
                 
 def do_test_run(mode=""):
-    if mode == "all_correct":
+    if mode == "all_correct": # simulates a perfect submission
         generate_results_all_correct()
-    elif mode == "random":
-        generate_results_all_random()
-    elif mode == "all_zero":
+    elif mode == "random-total": # simulates random locations and random values
+        generate_results_all_random_locations()
+    elif mode == "random-ps-rv": # simulates perfect segmentations but with random values
+        generate_results_all_random_labels_no_mutation()
+    elif mode == "random-is-rv": # simulates randomly imperfect segmentation with random values
+        generate_results_all_random_labels()
+    elif mode == "random-is-pv": # simulates andomly imperfect segmentation with perfect values
+        generate_results_all_random_mutes()
+    elif mode == "all_zero": # simulates when all masks are all zeros
         generate_results_all_zero()
-    elif mode == "all_one":
+    elif mode == "all_one": # simulates imperfect segmentation and all values 1
         generate_results_all_one()
-    elif mode == "50random50correct":
+    elif mode == "50random50correct": # simulates half perfect submission with the other half random locations and random values
         generate_results_fiftyfifty()
     cmd = [
         "bash", "do_test_run.sh"
     ]
-    subprocess.run(cmd, cwd="/mnt/c/Users/20260926/OneDrive - TU Eindhoven/Repos/TopAneu-26/eval/task2")
+    subprocess.run(cmd, cwd="/home/tue20260926/Repos/TopAneu-26/eval/task2")
     
     print(f"Testrun for mode '{mode}' concluded. Cleaning up outputs...")
     
     shutil.move("../test/output/metrics.json", f"outputs-{mode}.json")
 
+def get_surface(img):
+    return img & ~binary_erosion(img)
+
+def hd_fn(img1, img2, perc=95):
+    coords_a = np.argwhere(get_surface(img1))
+    coords_b = np.argwhere(get_surface(img2))
+    shortest_distances = []
+    for a in coords_a:
+        distances = np.linalg.norm(coords_b - a, axis=1)
+        shortest_distances.append(np.min(distances))
+    return np.percentile(shortest_distances, perc)
+
+def sanity():
+    imga = get_object(10)
+    imgb = np.zeros_like(imga)
+    objb = get_object(5)
+    imgb[0:5, 0:5, 0:5]=objb
+    print(hd_fn(imga, imgb))
+    
+
 if __name__ == "__main__":
-    #generate_gts(10)
+    # generate_gts(350)
     do_test_run("all_correct")
+    do_test_run("random-total")
+    do_test_run("random-ps-rv")
+    do_test_run("random-is-rv")
+    do_test_run("random-is-pv")
+    do_test_run("all_zero")
+    do_test_run("all_one")
+    do_test_run("50random50correct")

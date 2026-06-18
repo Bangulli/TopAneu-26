@@ -200,7 +200,7 @@ def do_test_run(mode=""):
     cmd = [
         "bash", "do_test_run.sh"
     ]
-    subprocess.run(cmd, cwd="/mnt/c/Users/20260926/OneDrive - TU Eindhoven/Repos/TopAneu-26/eval/task1")
+    subprocess.run(cmd, cwd="/home/tue20260926/Repos/TopAneu-26/eval/task1")
     
     print(f"Testrun for mode '{mode}' concluded. Cleaning up outputs...")
     
