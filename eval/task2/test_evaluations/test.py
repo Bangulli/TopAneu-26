@@ -49,21 +49,22 @@ def generate_mha(fn, value="random"):
     
 def random_morph(img):
     margin = random.choice(range(3, 21))
-    dec = random.choice(1, 2)
+    dec = random.choice([1, 2])
     if dec == 1:
         return binary_dilation(img, structure=generate_binary_structure(3, margin))
     else:
         return binary_erosion(img, structure=generate_binary_structure(3, margin))
     
 def generate_mha_like(fn, ref, value="random", mutate=True):
-    if value != "zeros":
+    if value != "zero":
         cc, n = label(ref)
         virtual_image = np.zeros_like(ref)
-        for i in range(n):
+        for i in range(1, n+1):
             struct = random_morph(cc==i) if mutate else cc==i
+            struct = struct.astype(np.uint8)
             if value == "random": struct *= random.choice(range(1,51))
-            elif value == "ones": struct *= 1
-            elif value == "match": struct *= np.median(ref[cc==i])
+            elif value == "one": struct *= 1
+            elif value == "match": struct *= np.median(ref[cc==i]).astype(np.uint8)
             virtual_image += struct
     else: virtual_image = np.zeros_like(ref)
     virtual_image = sitk.GetImageFromArray(virtual_image)
@@ -262,7 +263,7 @@ def generate_results_all_random_mutes():
         predictions.append(get_predictions_entry(id, fn, modality))
         os.makedirs(pred_dir/id/"output"/"images"/"aneurysm-segmentation")
         cur_img = sitk.ReadImage(gt_dir/fn)
-        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), value="match", mutate=False)
+        generate_mha_like(pred_dir/id/"output"/"images"/"aneurysm-segmentation"/f"{uuid.uuid1()}.mha", sitk.GetArrayFromImage(cur_img), value="match", mutate=True)
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
         

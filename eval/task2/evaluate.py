@@ -31,11 +31,18 @@ def get_surface(img):
 def hd_fn(img1, img2, perc=95):
     coords_a = np.argwhere(get_surface(img1))
     coords_b = np.argwhere(get_surface(img2))
-    shortest_distances = []
-    for a in coords_a:
-        distances = np.linalg.norm(coords_b - a, axis=1)
-        shortest_distances.append(np.min(distances))
-    return np.percentile(shortest_distances, perc)
+
+    if len(coords_a) == 0 or len(coords_b) == 0:
+        return np.nan
+
+    tree_b = cKDTree(coords_b)
+    tree_a = cKDTree(coords_a)
+
+    d_ab, _ = tree_b.query(coords_a)   # a -> nearest b
+    d_ba, _ = tree_a.query(coords_b)   # b -> nearest a
+
+    return max(np.percentile(d_ab, perc),
+               np.percentile(d_ba, perc))
 
 def extended_label(img):
     ccs = []
@@ -58,8 +65,8 @@ def evaluation_function(predictions, filename, tp_threshold=0.3): # numpy array 
     
     results = {}
     for cls in range(1, 51):
-        pred = gt_ccs[cls-1]
-        gt = pred_ccs[cls-1]
+        gt = gt_ccs[cls-1]
+        pred = pred_ccs[cls-1]
         
         # eval seg per case
         dsc = 0
@@ -70,9 +77,9 @@ def evaluation_function(predictions, filename, tp_threshold=0.3): # numpy array 
         tp = 0
         fp = 0
         if pred_n_per_aneu[cls-1]>0 and gt_n_per_aneu[cls-1]>0: # if both are nonzero do the loop and look for matches
-            for i in range(pred_n_per_aneu[cls-1]):
+            for i in range(1,pred_n_per_aneu[cls-1]+1):
                 is_tp = False
-                for j in range(gt_n_per_aneu[cls-1]):
+                for j in range(1,gt_n_per_aneu[cls-1]+1):
                     cur_dsc = dice_fn(gt==j, pred==i)
                     if cur_dsc > tp_threshold:
                         hd95 -= hd_fn(gt==j, pred==i, 95)

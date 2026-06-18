@@ -31,3 +31,29 @@ $$
 
 ## Ranking
 Submissions are ranked by first computing the average of these metrics across all classes and then by the average of the resulting global Precision, Recall and MCC.
+
+## Simulations
+The evaluation was tested with simulated data where random location jsons were generated and then evaluated under different prediciton conditions. These results as well as the script can be found in [test_evaluations](test_evaluations/).
+
+**Experiments**
+
+- all_correct: perfect results
+  - Precision: 1.00
+  - Recall: 1.00
+  - MCC: 1.00
+- all_one: every output is just a prediction of the label 1
+  - Precision: 0.00
+  - Recall: 0.02
+  - MCC: 0.00
+- all_zero: all preditions are empty
+  - Precision: 0.00
+  - Recall: 0.00
+  - MCC: 0.00
+- random: random predictions with a random amount of predictions with random labels
+  - Precision: 0.03
+  - Recall: 0.02
+  - MCC: 0.01
+- 50random50correct: 50% of samples are perfect results, the other 50% random generated as above.
+  - Precision: 0.48
+  - Recall: 0.47
+  - MCC: 0.46
