@@ -54,7 +54,7 @@ def evaluation_aggregation(metrics, eps=1e-6): # epsilons to avoid div by 0 erro
             (aggregates[f"TN_{i}"]+aggregates[f"FP_{i}"])
             *
             (aggregates[f"TN_{i}"]+aggregates[f"FN_{i}"])
-        ) + +eps
+        ) + eps
         aggregates[f"MCC_{i}"] = mcc_num/mcc_den
     return aggregates
 
