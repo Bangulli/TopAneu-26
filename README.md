@@ -13,7 +13,8 @@ It contains the following:
 * ️📊 A baseline for _task 1_ **WIP**
 * ️📊 A baseline for _task 2_ **WIP**
 * 🧮 The _evaluation methods_ used to evaluate yout submissions and to generate performance
-  metrics for ranking **WIP**
+  metrics for ranking 
+* 🧮 The _dataset_ provided for the training is provided as sha256 hashes
 
 Please note that this is a supplementary pack to the [documentation](https://grand-challenge.org/documentation/).
 
@@ -43,7 +44,11 @@ Then to run the scripts do:
 bash [do_build/do_save/do_test_run].sh
 ```
 ## Data
-WIP
+The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_depleument](topaneu_deployment/)
+
+## Evaluation Methods
+The evaluation methods together with simulated evaluations and results are provided for each task in [eval](eval/)
+Find more details of the methodology in the READMEs of the respective folder.
 
 ## Now What?
 To ensure a smooth start and avoid unnecessary frustration, it helps to first establish a
