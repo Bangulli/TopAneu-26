@@ -169,4 +169,4 @@ evaluation_method/
 # Ignore any actual images
 *.nii.gz
 *.mha
-*input/
+*test/input/
