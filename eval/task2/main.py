@@ -99,12 +99,12 @@ def main():
     # Use concurrent workers to process the predictions more efficiently
     metrics["results"] = run_prediction_processing(fn=process, predictions=predictions)
 
-    # We have the results per prediction, we can aggregate the results and
-    # generate an overall score(s) for this submission
-    if metrics["results"]:
-        metrics["aggregates"] = {
-            "my_metric": mean(result["my_metric"] for result in metrics["results"])
-        }
+    # # We have the results per prediction, we can aggregate the results and
+    # # generate an overall score(s) for this submission
+    # if metrics["results"]:
+    #     metrics["aggregates"] = {
+    #         "my_metric": mean(result["my_metric"] for result in metrics["results"])
+    #     }
 
     # Make sure to save the metrics
     write_metrics(metrics=metrics)

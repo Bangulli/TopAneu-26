@@ -166,5 +166,6 @@ cython_debug/
 upload_to_archive/
 evaluation_method/
 
-# For now ignore training-data
+# Ignore any actual images
 *.nii.gz
+*.mha

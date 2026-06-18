@@ -1,6 +1,6 @@
 [
     {
-        "pk": "a7ca1b5d-ae1b-4c8f-b118-12b97f830d79",
+        "pk": "4cb3331c-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
@@ -14,7 +14,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center1_ct_001_0000.mha"
                 },
                 "value": null
             }
@@ -24,17 +24,22 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
-                    "is_image_kind": true,
-                    "is_panimg_kind": true,
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
                     "is_dicom_image_kind": false,
-                    "is_json_kind": false,
+                    "is_json_kind": true,
                     "is_file_kind": false
                 },
                 "file": null,
-                "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
-                },
-                "value": null
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
@@ -42,7 +47,7 @@
         "status": "Succeeded"
     },
     {
-        "pk": "b7870faa-6538-4ff2-8f10-b4d62d3061d2",
+        "pk": "4cd1a57c-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
@@ -56,7 +61,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center1_ct_006_0000.mha"
                 },
                 "value": null
             }
@@ -66,6 +71,35 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "4cecce9c-6af3-11f1-9914-00155ddcbefc",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-mr-angiography",
+                    "relative_path": "images/head-mr-angio",
                     "is_image_kind": true,
                     "is_panimg_kind": true,
                     "is_dicom_image_kind": false,
@@ -74,9 +108,32 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center1_mr_010_0000.mha"
                 },
                 "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
@@ -84,7 +141,7 @@
         "status": "Succeeded"
     },
     {
-        "pk": "0426ba9e-491a-4091-811e-0093fe733a5b",
+        "pk": "4d04a3c8-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
@@ -98,7 +155,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center2_ct_002_0000.mha"
                 },
                 "value": null
             }
@@ -108,6 +165,35 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "4d19f7fa-6af3-11f1-9914-00155ddcbefc",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
                     "is_image_kind": true,
                     "is_panimg_kind": true,
                     "is_dicom_image_kind": false,
@@ -116,9 +202,32 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center2_ct_003_0000.mha"
                 },
                 "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
@@ -126,7 +235,101 @@
         "status": "Succeeded"
     },
     {
-        "pk": "3d307374-969c-406d-8593-199d2de95f2b",
+        "pk": "4d31e11c-6af3-11f1-9914-00155ddcbefc",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "topaneu_center2_ct_009_0000.mha"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "4d496dbe-6af3-11f1-9914-00155ddcbefc",
+        "inputs": [
+            {
+                "socket": {
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
+                    "is_image_kind": true,
+                    "is_panimg_kind": true,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": false,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": {
+                    "name": "topaneu_center3_ct_004_0000.mha"
+                },
+                "value": null
+            }
+        ],
+        "outputs": [
+            {
+                "socket": {
+                    "slug": "aneurysm-segmentation",
+                    "relative_path": "images/aneurysm-segmentation",
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
+                    "is_dicom_image_kind": false,
+                    "is_json_kind": true,
+                    "is_file_kind": false
+                },
+                "file": null,
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
+            }
+        ],
+        "exec_duration": "PT22M17S",
+        "invoke_duration": null,
+        "status": "Succeeded"
+    },
+    {
+        "pk": "4d602d1a-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
@@ -140,7 +343,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center3_mr_005_0000.mha"
                 },
                 "value": null
             }
@@ -150,17 +353,22 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
-                    "is_image_kind": true,
-                    "is_panimg_kind": true,
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
                     "is_dicom_image_kind": false,
-                    "is_json_kind": false,
+                    "is_json_kind": true,
                     "is_file_kind": false
                 },
                 "file": null,
-                "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
-                },
-                "value": null
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
@@ -168,7 +376,7 @@
         "status": "Succeeded"
     },
     {
-        "pk": "af982172-b815-4c6b-b33a-f035775a205d",
+        "pk": "4d771f2a-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
@@ -182,7 +390,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center3_mr_008_0000.mha"
                 },
                 "value": null
             }
@@ -192,17 +400,22 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
-                    "is_image_kind": true,
-                    "is_panimg_kind": true,
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
                     "is_dicom_image_kind": false,
-                    "is_json_kind": false,
+                    "is_json_kind": true,
                     "is_file_kind": false
                 },
                 "file": null,
-                "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
-                },
-                "value": null
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
@@ -210,12 +423,12 @@
         "status": "Succeeded"
     },
     {
-        "pk": "2cf93eda-7bbf-43ec-880e-4729a33f4e8e",
+        "pk": "4d8e8d2c-6af3-11f1-9914-00155ddcbefc",
         "inputs": [
             {
                 "socket": {
-                    "slug": "head-mr-angiography",
-                    "relative_path": "images/head-mr-angio",
+                    "slug": "head-ct-angiography",
+                    "relative_path": "images/head-ct-angio",
                     "is_image_kind": true,
                     "is_panimg_kind": true,
                     "is_dicom_image_kind": false,
@@ -224,7 +437,7 @@
                 },
                 "file": null,
                 "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
+                    "name": "topaneu_center4_ct_007_0000.mha"
                 },
                 "value": null
             }
@@ -234,17 +447,22 @@
                 "socket": {
                     "slug": "aneurysm-segmentation",
                     "relative_path": "images/aneurysm-segmentation",
-                    "is_image_kind": true,
-                    "is_panimg_kind": true,
+                    "example_value": {
+                        "key": "value",
+                        "None": null
+                    },
+                    "is_image_kind": false,
+                    "is_panimg_kind": false,
                     "is_dicom_image_kind": false,
-                    "is_json_kind": false,
+                    "is_json_kind": true,
                     "is_file_kind": false
                 },
                 "file": null,
-                "image": {
-                    "name": "the_original_filename_of_the_file_that_was_uploaded_or_image_set"
-                },
-                "value": null
+                "image": null,
+                "value": {
+                    "key": "value",
+                    "None": null
+                }
             }
         ],
         "exec_duration": "PT22M17S",
