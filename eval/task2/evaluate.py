@@ -28,7 +28,7 @@ def volsim_fn(img1, img2, eps=1e-6): # as described in https://pmc.ncbi.nlm.nih.
 def get_surface(img):
     return img & ~binary_erosion(img)
 
-def hd_fn(img1, img2, perc=95):
+def hd_fn(img1, img2, perc=95): # NOTE this function is claude generated as my implementation with a double loop was too slow.
     coords_a = np.argwhere(get_surface(img1))
     coords_b = np.argwhere(get_surface(img2))
 
