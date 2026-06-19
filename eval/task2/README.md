@@ -3,7 +3,7 @@
 Task 1 is an image classification task. Expected outputs are .json files with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. Segmentation metrics (DSC, VS, HD95) are only computet on TPs. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TN and FN in that class.
 
 ## Method
-At evaluation time all TP, FP, FN and TN are accumulated for each individual class over every prediction. Segmentations are counted as TP if they have the same class and more than 0.3 DSC with the corresponding GT object. TNs are counted as the number of predictions in the ground truth that is not of the currently observed class.
+At evaluation time all TP, FP, FN and TN are accumulated for each individual class over every prediction. Segmentations are counted as TP if they have the same class and any overlap with the corresponding GT object. TNs are counted as the number of predictions in the ground truth that is not of the currently observed class.
 
 **Example**:
 
@@ -15,7 +15,7 @@ If there are the *possible classes*=[A, B, C] with this segmentation layout:
 That would result in:
 
 - A: TP=1, FP=0, FN=0, TN=1
-- B: TP=0, FP=1, FN=1, TN=1
+- B: TP=1, FP=0, FN=0, TN=1
 - C: TP=0, FP=1, FN=0, TN=2
 
 ## Metrics
@@ -83,12 +83,12 @@ The evaluation was tested with simulated data where random images with random sp
   - DSC: 0.02
   - VS: 0.02
 - 50random50correct: 50% of the samples are perfect results the other are randomly placed spheres with random size and classes in the predictions
-  - Precision: 0.55
-  - Recall: 0.53
-  - MCC: 0.52
-  - HD95: -0.01
-  - DSC: 0.59
-  - VS: 0.59
+  - Precision: 0.5
+  - Recall: 0.49
+  - MCC: 0.47
+  - HD95: -0.02
+  - DSC: 0.48
+  - VS: 0.48
 - random-total: All predictions are randomly placed spheres with random size and classes
   - Precision: 0.00
   - Recall: 0.00
@@ -97,23 +97,23 @@ The evaluation was tested with simulated data where random images with random sp
   - DSC: 0.00
   - VS: 0.00
 - random-ps-rv: Perfect segmentations with random labels in every object
-  - Precision: 0.02
-  - Recall: 0.01
-  - MCC: 0.00
+  - Precision: 0.01
+  - Recall: 0.02
+  - MCC: -0.01
   - HD95: 0.00
-  - DSC: 0.01
-  - VS: 0.01
+  - DSC: 0.02
+  - VS: 0.02
 - random-is-pv: Segmentations with random shapes at similar locations with perfectly correct labels
-  - Precision: 0.98
-  - Recall: 0.97
-  - MCC: 0.97
-  - HD95: -1.81
+  - Precision: 1.00
+  - Recall: 0.99
+  - MCC: 0.99
+  - HD95: -1.86
   - DSC: 0.77
   - VS: 0.77
 - random-is-rv: Segmentations with random shapes at similar locations with random labels
-  - Precision: 0.03
-  - Recall: 0.03
-  - MCC: 0.01
-  - HD95: -0.05
+  - Precision: 0.02
+  - Recall: 0.02
+  - MCC: 0.00
+  - HD95: -0.04
   - DSC: 0.02
   - VS: 0.02

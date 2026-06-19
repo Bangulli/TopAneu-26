@@ -2,33 +2,97 @@ import numpy as np
 import json, os, math, glob
 from pathlib import Path
 import SimpleITK as sitk
+from typing import Union, List, Tuple, Literal
 from scipy.ndimage import label, binary_erosion
 from scipy.spatial import cKDTree
 
 ### copied from main
-def load_image_file_as_array(location):
-    result = sitk.ReadImage(location)
+def load_image_file_as_array(location: Path) -> np.ndarray:
+    """Load an image as a numpy array using sitk
 
+    Args:
+        location (Path): Path to the image
+
+    Returns:
+        np.ndarray: The image as a 3d array
+    """
+    result = sitk.ReadImage(location)
     # Convert it to a Numpy array
     return sitk.GetArrayFromImage(result)
 
-def load_gt(fn):
+def load_gt(fn: str) -> np.ndarray:
+    """Load a ground truth reference image for a given filepath
+
+    Args:
+        fn (str): The filename of the image
+
+    Returns:
+        np.ndarray: The correpsonding gt segmentation as a 3d array
+    """
     dir = Path("/opt/ml/input/data/ground_truth/location_masks")
     return load_image_file_as_array(dir/fn.replace("_0000.mha", ".mha"))
 
-def iou_fn(img1, img2, eps=1e-6):
+def iou_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float:
+    """Compute the iou between two binary images
+
+    Args:
+        img1 (np.ndarray): Image a
+        img2 (np.ndarray): Image b
+        eps (float, optional): Epsilon to avoid div by zero error. Defaults to 1e-6.
+
+    Returns:
+        float: The iou between a and b
+    """
     return (np.bitwise_and(img1, img2).sum()/(np.bitwise_or(img1, img2).sum())+eps)
 
-def dice_fn(img1, img2, eps=1e-6):
+def dice_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float:
+    """Compute the dice score between two binary images
+
+    Args:
+        img1 (np.ndarray): Image a
+        img2 (np.ndarray): Image b
+        eps (float, optional): Epsilon to avoid div by zero error. Defaults to 1e-6.
+
+    Returns:
+        float: The dice score between a and b
+    """
     return ((2*np.bitwise_and(img1, img2).sum())/(img1.sum() + img2.sum() + eps))
 
-def volsim_fn(img1, img2, eps=1e-6): # as described in https://pmc.ncbi.nlm.nih.gov/articles/PMC4533825/pdf/12880_2015_Article_68.pdf
+def volsim_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float: # as described in https://pmc.ncbi.nlm.nih.gov/articles/PMC4533825/pdf/12880_2015_Article_68.pdf
+    """Compute the volumetric similarity between two binary images
+
+    Args:
+        img1 (np.ndarray): Image a
+        img2 (np.ndarray): Image b
+        eps (float, optional): Epsilon to avoid div by zero error. Defaults to 1e-6.
+
+    Returns:
+        float: The volumetric similarity between a and b
+    """
     return 1 - (abs(img1.sum()-img2.sum())/(img1.sum()+img2.sum()+eps))
 
-def get_surface(img):
+def get_surface(img: np.ndarray) -> np.ndarray:
+    """Get the surface of the objects in a 3d binary image
+
+    Args:
+        img (np.ndarray): A 3d binary image
+
+    Returns:
+        np.ndarray: A 3d binary image containing only the surface of the input image
+    """
     return img & ~binary_erosion(img)
 
-def hd_fn(img1, img2, perc=95): # NOTE this function is claude generated as my implementation with a double loop was too slow.
+def hd_fn(img1: np.ndarray, img2: np.ndarray, perc: int=95) -> float: # NOTE this function is claude generated as my implementation with a double loop was too slow.
+    """Compute the percentile of the hausdorff distance between the surfaces of two objects in 3d space
+
+    Args:
+        img1 (np.ndarray): Image a
+        img2 (np.ndarray): Image b
+        perc (int, optional): The percentile. Defaults to 95.
+
+    Returns:
+        float: The perc percentile of the bidirectional HD between a and b
+    """
     coords_a = np.argwhere(get_surface(img1))
     coords_b = np.argwhere(get_surface(img2))
 
@@ -44,7 +108,15 @@ def hd_fn(img1, img2, perc=95): # NOTE this function is claude generated as my i
     return max(np.percentile(d_ab, perc),
                np.percentile(d_ba, perc))
 
-def extended_label(img):
+def extended_label(img: np.ndarray) -> Tuple[List[np.ndarray], List[int], int]:
+    """Get the connected components and labels for every class in a segmentation mask
+
+    Args:
+        img (np.ndarray): The segmentation mask
+
+    Returns:
+        Tuple[List[np.ndarray], List[int], int]: The connceted components for each class, the n components for each class and the total number of components in the image.
+    """
     ccs = []
     ns = []
     present_cls = np.unique(img).tolist()
@@ -58,7 +130,41 @@ def extended_label(img):
             ns.append(n)
     return ccs, ns, sum(ns)
 
-def evaluation_function(predictions, filename, tp_threshold=0.3): # numpy array of the predictions and the filename 
+def check_tp(img1: np.ndarray, img2: np.ndarray, threshold: float=0.3, method: Literal["intersection", "dice", "iou"]="intersection") -> bool:
+    """Check if two segmentations are a true positive
+
+    Args:
+        img1 (np.ndarray): Segmentation a
+        img2 (np.ndarray): Segmentation b
+        threshold (float, optional): The threshold to determin a tp. Defaults to 0.3.
+        method (Literal[&quot;intersection&quot;, &quot;dice&quot;, &quot;iou&quot;], optional): The metric to consider. Defaults to "intersection".
+
+    Raises:
+        ValueError: If the passed method is not supported
+
+    Returns:
+        bool: Whether the two input segmentation fulfill the TP criterion.
+    """
+    match method:
+        case "intersection":
+            return np.bitwise_and(img1, img2).sum() > threshold
+        case "dice":
+            return dice_fn(img1, img2) > threshold
+        case "iou":
+            return iou_fn(img1, img2) > threshold
+        case _:
+            raise ValueError(f"Invalid tp checking method '{method}'")
+
+def evaluation_function(predictions: np.ndarray, filename: str) -> dict: # numpy array of the predictions and the filename 
+    """Computes the amount of TP, FP, TN, FN and the Dice Score, Volumetric Similarity and HD95 for the TPs for all possible classes for a given sample.
+
+    Args:
+        predictions (np.ndarray): The predicted segmentation
+        filename (str): The name of the corresponding image
+
+    Returns:
+        dict: The metrics.
+    """
     gts = load_gt(filename)
     gt_ccs, gt_n_per_aneu, gt_n_aneu = extended_label(gts)
     pred_ccs, pred_n_per_aneu, pred_n_aneu = extended_label(predictions)
@@ -80,11 +186,10 @@ def evaluation_function(predictions, filename, tp_threshold=0.3): # numpy array 
             for i in range(1,pred_n_per_aneu[cls-1]+1):
                 is_tp = False
                 for j in range(1,gt_n_per_aneu[cls-1]+1):
-                    cur_dsc = dice_fn(gt==j, pred==i)
-                    if cur_dsc > tp_threshold:
+                    if check_tp(gt==j, pred==i, threshold=0, method="intersection"):
                         hd95 -= hd_fn(gt==j, pred==i, 95)
                         vs += volsim_fn(gt==j, pred==i) 
-                        dsc += cur_dsc
+                        dsc += dice_fn(gt==j, pred==i)
                         is_tp = True
                         break
                 if is_tp: tp += 1
@@ -114,7 +219,16 @@ def evaluation_function(predictions, filename, tp_threshold=0.3): # numpy array 
         results[f"TN_{cls}"] = tn
     return results
 
-def evaluation_aggregation(metrics, eps=1e-6): # epsilons to avoid div by 0 error
+def evaluation_aggregation(metrics: List[dict], eps: float=1e-6) -> dict: # epsilons to avoid div by 0 error
+    """Aggregates the metrics over all samples and computes the per class Precision, Recal and MCC and normalizes the Dice Score, Volumetric Similarity and HD95 by the total amount of all TP and FN for each class.
+
+    Args:
+        metrics (List[dict]): The metrics for each sample
+        eps (float, optional): The epsilon to avoid division by zero. Defaults to 1e-6.
+
+    Returns:
+        dict: The aggregated metrics for each class
+    """
     aggregates = {}
     keys = metrics[0].keys()
     ## aggregate all tpfpfn
@@ -144,7 +258,15 @@ def evaluation_aggregation(metrics, eps=1e-6): # epsilons to avoid div by 0 erro
         aggregates[f"VOLSIM_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+eps)
     return aggregates
 
-def evaluation_average(metrics):
+def evaluation_average(metrics: dict) -> dict:
+    """Computes the average metrics across classes for ranking
+
+    Args:
+        metrics (dict): The per-class metrics
+
+    Returns:
+        dict: The average-across-classes metrics
+    """
     averages = {"PRECISION": 0, "RECALL":0, "MCC":0, "DICE":0, "HD95":0, "VOLSIM":0}
     for i in range(1, 51):
         averages["PRECISION"]+=metrics[f"PRECISION_{i}"]

@@ -3,6 +3,7 @@ This is an example for an inference function for your models
 """
 import numpy as np
 from pathlib import Path
+import random
 
 def infer_ct(img: np.ndarray) -> dict:
     """Predicts aneurysm locations in CTA images.
@@ -26,7 +27,9 @@ def infer_ct(img: np.ndarray) -> dict:
         print(f.read())
 
     # For now, let us make bogus predictions
-    return {"locations": [np.mean(img)]}
+    n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
+    if n_aneu > 0: return {"locations": random.sample(range(1,51), k=n_aneu)}
+    else: return {"locations": []}
 
 def infer_mr(img: np.ndarray) -> dict:
     """Predicts aneurysm locations in CTA images.
@@ -50,4 +53,6 @@ def infer_mr(img: np.ndarray) -> dict:
         print(f.read())
 
     # For now, let us make bogus predictions
-    return {"locations": [np.mean(img)]}
+    n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
+    if n_aneu > 0: return {"locations": random.sample(range(1,51), k=n_aneu)}
+    else: return {"locations": []}
