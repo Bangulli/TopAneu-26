@@ -67,6 +67,8 @@ The filenames for the images and labels are named in the following schema: topan
 | `Terms_of_use.txt`      | Terms of use for the released data.                                                                                                                          |
 | `README.md`             | Description of the dataset, folder structure, labels, usage notes, and contact information.                                                                  |
 
+*NOTE:* The vessel segmentations were predicted by an in-house model developed by the TopBrain UZH organizers. It borrows ideas and findings from the TopBrain 2025 summary, which is available [here](https://www.medrxiv.org/content/10.64898/2026.05.28.26354312). This model is going to be part of the organizer-submission for [TopBrain V2 challenge](https://topbrain2026.grand-challenge.org/).
+
 **Mapping of aneurysm location:**
 
 The location_masks and location_jsons folders contain multiclass aneurysm annotations.
