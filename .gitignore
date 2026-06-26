@@ -170,3 +170,5 @@ evaluation_method/
 *.nii.gz
 *.mha
 *input/
+TopAneu-26/
+*instance level/

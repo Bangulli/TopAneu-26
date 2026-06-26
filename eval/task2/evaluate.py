@@ -82,31 +82,36 @@ def get_surface(img: np.ndarray) -> np.ndarray:
     """
     return img & ~binary_erosion(img)
 
-def hd_fn(img1: np.ndarray, img2: np.ndarray, perc: int=95) -> float: # NOTE this function is claude generated as my implementation with a double loop was too slow.
+def hd_fn(img1: np.ndarray, img2: np.ndarray, perc: int=95, norm: bool=True) -> float: # NOTE this function is claude generated as my implementation with a double loop was too slow.
     """Compute the percentile of the hausdorff distance between the surfaces of two objects in 3d space
+        In case of either mask being nonzero with the respective other being zero, will return the diagonal of the volume
 
     Args:
         img1 (np.ndarray): Image a
         img2 (np.ndarray): Image b
         perc (int, optional): The percentile. Defaults to 95.
+        norm (bool, optional): Whether to return absolute or normalized values. Normalized by the diagnoal of the volume. Defaults to True.
 
     Returns:
         float: The perc percentile of the bidirectional HD between a and b
     """
+    diag = np.linalg.norm(img1.shape)
+    if ~np.any(img1) and ~np.any(img2): return 0 # both 0 is perfect seg
+    elif ~np.any(img1) or ~np.any(img2): return 1 if norm else diag # only one zero is the worst possible segmentation
+        
     coords_a = np.argwhere(get_surface(img1))
     coords_b = np.argwhere(get_surface(img2))
-
-    if len(coords_a) == 0 or len(coords_b) == 0:
-        return np.nan
 
     tree_b = cKDTree(coords_b)
     tree_a = cKDTree(coords_a)
 
     d_ab, _ = tree_b.query(coords_a)   # a -> nearest b
     d_ba, _ = tree_a.query(coords_b)   # b -> nearest a
-
-    return max(np.percentile(d_ab, perc),
+    
+    hd = max(np.percentile(d_ab, perc),
                np.percentile(d_ba, perc))
+
+    return hd/diag if norm else hd
 
 def extended_label(img: np.ndarray) -> Tuple[List[np.ndarray], List[int], int]:
     """Get the connected components and labels for every class in a segmentation mask
@@ -155,7 +160,7 @@ def check_tp(img1: np.ndarray, img2: np.ndarray, threshold: float=0.3, method: L
         case _:
             raise ValueError(f"Invalid tp checking method '{method}'")
 
-def evaluation_function(predictions: np.ndarray, filename: str) -> dict: # numpy array of the predictions and the filename 
+def evaluation_function_instance_level(predictions: np.ndarray, filename: str) -> dict: # numpy array of the predictions and the filename 
     """Computes the amount of TP, FP, TN, FN and the Dice Score, Volumetric Similarity and HD95 for the TPs for all possible classes for a given sample.
 
     Args:
@@ -187,7 +192,7 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict: # numpy
                 is_tp = False
                 for j in range(1,gt_n_per_aneu[cls-1]+1):
                     if check_tp(gt==j, pred==i, threshold=0, method="intersection"):
-                        hd95 -= hd_fn(gt==j, pred==i, 95)
+                        hd95 += hd_fn(gt==j, pred==i, 95)
                         vs += volsim_fn(gt==j, pred==i) 
                         dsc += dice_fn(gt==j, pred==i)
                         is_tp = True
@@ -219,6 +224,52 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict: # numpy
         results[f"TN_{cls}"] = tn
     return results
 
+def evaluation_function(predictions: np.ndarray, filename: str) -> dict:
+    """Computes the amount of TP, FP, TN, FN and the Dice Score, Volumetric Similarity and HD95 for the TPs for all possible classes for a given sample.
+
+    Args:
+        predictions (np.ndarray): The predicted segmentation
+        filename (str): The name of the corresponding image
+
+    Returns:
+        dict: The metrics.
+    """
+    gt = load_gt(filename)
+    
+    results = {}
+    preds = np.unique(predictions).tolist()
+    gts = np.unique(gt).tolist()
+    n_aneu = len(gts)
+
+    for cls in range(1, 51): 
+        pred_count = len([lbl for lbl in preds if lbl==cls])
+        gt_count = len([lbl for lbl in gts if lbl==cls])
+        tp = min(pred_count, gt_count)
+        fp = max(0, pred_count - gt_count)
+        fn = max(0, gt_count - pred_count)
+        tn = n_aneu-(tp+fn)
+        results[f"TP_{cls}"] = tp
+        results[f"FP_{cls}"] = fp
+        results[f"FN_{cls}"] = fn
+        results[f"TN_{cls}"] = tn
+        
+        if pred_count > 0 or gt_count > 0: # only compute if necessary to save runtime. Comp is necessary if any segmentation is available
+            results[f"DICE_{cls}"] = dice_fn(gt==cls, predictions==cls)
+            results[f"HD95_{cls}"] = hd_fn(gt==cls, predictions==cls, 95, True)
+            results[f"VOLSIM_{cls}"] = volsim_fn(gt==cls, predictions==cls)
+        else:
+            results[f"DICE_{cls}"] = 0
+            results[f"HD95_{cls}"] = 0
+            results[f"VOLSIM_{cls}"] = 0
+
+
+            
+        
+    # results["INSTANCE_LEVEL"] = evaluation_function_instance_level(predictions, filename) omit for now.
+
+    return results
+    
+
 def evaluation_aggregation(metrics: List[dict], eps: float=1e-6) -> dict: # epsilons to avoid div by 0 error
     """Aggregates the metrics over all samples and computes the per class Precision, Recal and MCC and normalizes the Dice Score, Volumetric Similarity and HD95 by the total amount of all TP and FN for each class.
 
@@ -233,6 +284,7 @@ def evaluation_aggregation(metrics: List[dict], eps: float=1e-6) -> dict: # epsi
     keys = metrics[0].keys()
     ## aggregate all tpfpfn
     for k in keys:
+        if k == 'INSTANCE_LEVEL':continue
         aggregates[k]=sum([samp[k] for samp in metrics])
     ## compute per location prec, rec, mcc
     for i in range(1, 51):
@@ -253,9 +305,9 @@ def evaluation_aggregation(metrics: List[dict], eps: float=1e-6) -> dict: # epsi
         aggregates[f"MCC_{i}"] = mcc_num/mcc_den
         
         # comp segmentation scores
-        aggregates[f"DICE_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+eps)
-        aggregates[f"HD95_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+eps)
-        aggregates[f"VOLSIM_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+eps)
+        aggregates[f"DICE_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+aggregates[f"FP_{i}"]+eps)
+        aggregates[f"HD95_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+aggregates[f"FP_{i}"]+eps)
+        aggregates[f"VOLSIM_{i}"] /= (aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+aggregates[f"FP_{i}"]+eps)
     return aggregates
 
 def evaluation_average(metrics: dict) -> dict:

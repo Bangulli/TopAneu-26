@@ -1,6 +1,6 @@
 # TopAneu-26 Task 1 evaluation methodology
 
-Task 1 is an image classification task. Expected outputs are .json files with the detected aneurysm locations. Evaluation metrics are **Precision**, **Recall** and **Matthews Correlation Coefficient (MCC)** and computed for each class. Submissions are ranked by the average of these metrics across all classes.
+Task 1 is a multiclass image classification task. Expected outputs are .json files with the detected aneurysm locations. Evaluation metrics are **Precision**, **Recall** and **Matthews Correlation Coefficient (MCC)** and computed for each class. Submissions are ranked by the average of these metrics across all classes.
 
 ## Method
 At evaluation time all TP, FP, FN and TN are accumulated for each individual class over every prediction. TNs are counted as the number instances in the ground truth minus the number of TP and FN.
@@ -33,7 +33,7 @@ $$
 $$
 
 ## Ranking
-Submissions are ranked by first computing the average of these metrics across all classes and then by the average of the resulting global Precision, Recall and MCC.
+Submissions are ranked by first computing the average of these metrics across all classes and then by the average rank of the resulting global Precision, Recall and MCC.
 
 ## Simulations
 The evaluation was tested with simulated data where random location jsons were generated and then evaluated under different prediciton conditions. These results as well as the script can be found in [test_evaluations](test_evaluations/).

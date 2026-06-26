@@ -12,11 +12,11 @@ It contains the following:
 * ️🦾 A template for _task 2_ to base your submissions on
 * ️📊 A baseline for _task 1_ **WIP**
 * ️📊 A baseline for _task 2_ **WIP**
-* 🧮 The _evaluation methods_ used to evaluate yout submissions and to generate performance
+* 🧮 The _evaluation methods_ used to evaluate your submissions and to generate performance
   metrics for ranking 
-* 🧮 The _dataset_ provided for the training is provided as sha256 hashes
+* 💾 The _dataset_ for the training is provided as sha256 hashes together with a convenient download script.
 
-Please note that this is a supplementary pack to the [documentation](https://grand-challenge.org/documentation/).
+Please note that this is a supplementary pack to the [Grand Challenge documentation](https://grand-challenge.org/documentation/).
 
 ## Templates
 
@@ -44,11 +44,21 @@ Then to run the scripts do:
 bash [do_build/do_save/do_test_run].sh
 ```
 ## Data
-The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_depleument](topaneu_deployment/)
+The data is hosted on [SWITCHDrive](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
+The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_deployment](topaneu_deployment/)
+You can download the data and check the integrity using this short [script](utils/download.py) that will download the dataset to *TopAneu-26/* in the repository directory:
+```bash
+python utils/download.py
+```
+**NOTE** It requires an environment with the `requests` and `tqdm` libraries installed.
 
 ## Evaluation Methods
 The evaluation methods together with simulated evaluations and results are provided for each task in [eval](eval/)
 Find more details of the methodology in the READMEs of the respective folder.
+
+The TL;DR is: 
+- Task one evaluates by counting TP, FP, TN, FN in all samples, then computing per class Precision, Recall and MCC
+- Task two evaluates by extracting the unique labels from the masks and evaluating as above adding Dice, Volumetric Similarity and Hausdorff Distance as segmentation metrics. Segmentation is evaluated for the whole volume and not for each connected component to avoid edge case ambiguity.
 
 ## Now What?
 To ensure a smooth start and avoid unnecessary frustration, it helps to first establish a
@@ -62,7 +72,7 @@ the example algorithm and example evaluation method.
 Develop your method and integrate it into the templates.
 
 ### Step 3: Save and Upload the Algorithm
-After successfully running the local test script, save the algorithm image: using the save script. On the platform: [create an Algorithm](https://grand-challenge.org/documentation/create-an-algorithm-page/#creating-an-algorithm-for-a-challenge) and upload the algorithm image.
+After successfully running the local test script, save the algorithm image: using the save script. On the platform: [create an algorithm](https://grand-challenge.org/documentation/create-an-algorithm-page/#creating-an-algorithm-for-a-challenge) and upload the algorithm image.
 
 ### Step 4: Submit the Example Algorithm
 [Submit your algorithm image](https://grand-challenge.org/documentation/automated-evaluation/) to the challenge.
