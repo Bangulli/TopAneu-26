@@ -20,7 +20,7 @@ That would result in:
 - B: TP=1, FP=0, FN=0, TN=1
 - C: TP=0, FP=1, FN=0, TN=2
 
-### Why are we not wroking on the instance level?
+### Why are we not working on the instance level?
 **In short**: to avoid ambiguity in edge cases. 
 Evaluating on the instance level is feasible but needs many rules that make it less robust. For example if there is one big object overlapped with multiple small ones not all of the small ones can be TPs as that would inflate metrics. This is avoided by evaluating on the volume level.
 

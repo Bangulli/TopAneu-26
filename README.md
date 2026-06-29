@@ -57,8 +57,19 @@ The evaluation methods together with simulated evaluations and results are provi
 Find more details of the methodology in the READMEs of the respective folder.
 
 The TL;DR is: 
-- Task one evaluates by counting TP, FP, TN, FN in all samples, then computing per class Precision, Recall and MCC
-- Task two evaluates by extracting the unique labels from the masks and evaluating as above adding Dice, Volumetric Similarity and Hausdorff Distance as segmentation metrics. Segmentation is evaluated for the whole volume and not for each connected component to avoid edge case ambiguity.
+- Task one: Multiclass image location classification
+  - Expected outputs: Json files containing the predicted locations. (see [Schema](json_schema.json))
+  - Predicted labels (Pred) are compared to the ground truth (GT) and per-class metrics are computed for every sample and class: TP = label present in GT and Pred, FP = present in Pred not in GT, FN = Present in GT but not in Pred, TN = N labels in GT - (TP+FN).
+  - The TP, FP, TN, FN are accumulated over the whole testset and Precision, Recall and MCC are computed per class.
+  - For the ranking the Precision, Recall and MCC values are averaged across classes.
+- Task two: Instance Segmentation
+  - Expected outputs: 3D (multi-)instance location segmentation masks.
+  - Unique values are extracted from both the Pred and GT and classification is evaluated as above.
+  - Segmentation is evaluated on a **volume** level, the GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
+
+### Run Locally
+Similar to the [Templates](#templates) bash scripts are provided to run the evaluation containers locally as they would be run on GC. If you want to run the evaluation locally you can prepare the data by placing the GT files in `./eval/task[1/2]/ground_truth/[location_jsons/location_masks]` and the predicted files in subdirectories in `./eval/task[1/2]/test/input/`. Notably the input subdiretories need to fit to the convention of the specific task and contain a `predictions.json` file to match the random UIDs to the GT data. For Task 1: `./eval/task1/test/input/[UID]/output/predicted-aneurysm-location.json`; For Task 2: `./eval/task2/test/input/[UID]/output/images/aneurysm-segmentation/[UID].mha`. The `predictions.json` must map the UID to the actual filename of the sample image used to predict the output and is a list of prediction entries. Take a look at the `get_predictions_entry` function in the test scripts ([task1](eval/task1/test_evaluations/test.py), [task2](eval/task2/test_evaluations/test.py)) used to check the robustness of the methods.
+
 
 ## Now What?
 To ensure a smooth start and avoid unnecessary frustration, it helps to first establish a
