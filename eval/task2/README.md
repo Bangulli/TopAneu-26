@@ -5,7 +5,7 @@ Task 2 is an instance segmentation task. Expected outputs are .mha volumes with 
 ## Method
 At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. For that the unique values in both the GT and Prediction masks are extracted. Co-occurance means TP, Missingness in either means FP/FN, TN is the absolute amount of other-class items in the GT.
 
-Segmentation metrics are computed on a **volume** level, disregarding connected components. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
+Segmentation metrics are computed on a **volume** level, disregarding instances. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
 
 **Example**:
 
