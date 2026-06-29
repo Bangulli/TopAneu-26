@@ -25,6 +25,8 @@ def check_checksums(checksum_dir, image_dir, block_size=65563):
         with open(checksum_dir/f.replace(".nii.gz", ".sha"), "r") as file:
             ref = file.read()
         assert ref == sha256.hexdigest(), f"Checksums didnt match for image {f}"
+    
+    print(f"\033[32;1mSUCCESS:\033[0m All checksumes matched between {checksum_dir} and {image_dir}")
 
 if __name__ == "__main__":
     make_checksums_for_dir("topaneu_deployment/images")
