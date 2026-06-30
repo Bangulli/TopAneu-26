@@ -237,23 +237,29 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict:
     gt = load_gt(filename)
     
     results = {}
-    preds = np.unique(predictions).tolist()
-    gts = np.unique(gt).tolist()
+    gts = [elem for elem in np.unique(gt).tolist() if elem != 0]
     n_aneu = len(gts)
 
     for cls in range(1, 51): 
-        pred_count = len([lbl for lbl in preds if lbl==cls])
-        gt_count = len([lbl for lbl in gts if lbl==cls])
-        tp = min(pred_count, gt_count)
-        fp = max(0, pred_count - gt_count)
-        fn = max(0, gt_count - pred_count)
+        ## check for presence and tp
+        is_in_pred = np.any(predictions==cls)
+        is_in_gt = np.any(gt==cls)
+        is_tp = check_tp(gt==cls, predictions==cls, 0, "intersection") if (is_in_gt and is_in_pred) else False
+        
+        ## comp tpfptnfn
+        tp = 1 if is_tp else 0
+        fp = 1 if (is_in_pred and not is_tp) else 0
+        fn = 1 if (is_in_gt and not is_tp) else 0
         tn = n_aneu-(tp+fn)
+        
+        ## write to dict
         results[f"TP_{cls}"] = tp
         results[f"FP_{cls}"] = fp
         results[f"FN_{cls}"] = fn
         results[f"TN_{cls}"] = tn
         
-        if pred_count > 0 or gt_count > 0: # only compute if necessary to save runtime. Comp is necessary if any segmentation is available
+        ## comp seg metrics if any examples of the class are available in either pred or gt. This check saves a lot of time for TNs of which we have a lot with 50 classes
+        if is_in_pred or is_in_gt:
             results[f"DICE_{cls}"] = dice_fn(gt==cls, predictions==cls)
             results[f"HD95_{cls}"] = hd_fn(gt==cls, predictions==cls, 95, True)
             results[f"VOLSIM_{cls}"] = volsim_fn(gt==cls, predictions==cls)

@@ -1,11 +1,11 @@
 # TopAneu-26 Task 2 evaluation methodology
 
-Task 2 is an instance segmentation task. Expected outputs are .mha volumes with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. Segmentation metrics (DSC, VS, HD95) are only computed when either the GT or the Prediction contains instances of the respective class. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TN, FN and FP in that class.
+Task 2 is an instance segmentation task. Expected outputs are .mha volumes with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. Segmentation metrics (DSC, VS, HD95) are only computed when either the GT or the Prediction contains instances of the respective class. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TP, FN and FP in that class.
 
 ## Method
-At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. For that the unique values in both the GT and Prediction masks are extracted. Co-occurance means TP, Missingness in either means FP/FN, TN is the absolute amount of other-class items in the GT.
+At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. The GT and predicted masks are binarized for each class, a TP is present if the intersection is > 0, FN = the label is present in GT but not a TP, FP = the label is present in Pred but a TP, TN = N labels in GT - (TP+FN).
 
-Segmentation metrics are computed on a **volume** level, disregarding instances. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
+Segmentation metrics are computed on a **volume** level, **disregarding instances**. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
 
 **Example**:
 
@@ -22,7 +22,7 @@ That would result in:
 
 ### Why are we not working on the instance level?
 **In short**: to avoid ambiguity in edge cases. 
-Evaluating on the instance level is feasible but needs many rules that make it less robust. For example if there is one big object overlapped with multiple small ones not all of the small ones can be TPs as that would inflate metrics. This is avoided by evaluating on the volume level.
+Evaluating on the instance level is feasible but needs many rules that make it less robust. For example if there is one big object overlapped with multiple small ones not all of the small ones can be TPs as that would inflate metrics which is avoided by evaluating on the volume level. Furthermore it is very unlikely for one case to have multiple instances of the same class (i.e. multiple aneurysms in the same location in this challenge).
 
 ## Metrics
 **Precision** is computed for every class using:
@@ -89,37 +89,37 @@ The evaluation was tested with simulated data where random images with random sp
   - HD95: 1.00
   - VS: 0.00
 - 50random50correct: 50% of the samples are perfect results the other are randomly placed spheres with random size and classes in the predictions
-  - Precision: 0.57
-  - Recall: 0.54
-  - MCC: 0.54
-  - DSC: 0.38
-  - HD95: 0.62
-  - VS: 0.38
+  - Precision: 0.51
+  - Recall: 0.50
+  - MCC: 0.49
+  - DSC: 0.34
+  - HD95: 0.66
+  - VS: 0.34
 - random-total: All predictions are randomly placed spheres with random size and classes
   - Precision: 0.04
-  - Recall: 0.04
-  - MCC: 0.03
+  - Recall: 0.03
+  - MCC: 0.02
   - DSC: 0.00
   - HD95: 0.99
   - VS: 0.01
 - random-ps-rv: Perfect segmentations with random labels in every object
-  - Precision: 0.03
+  - Precision: 0.04
   - Recall: 0.03
-  - MCC: 0.01
+  - MCC: 0.02
   - DSC: 0.01
-  - HD95: 0.99
+  - HD95: 0.98
   - VS: 0.01
 - random-is-pv: Segmentations with random shapes at similar locations with perfectly correct labels
   - Precision: 1.00
-  - Recall: 1.00
-  - MCC: 1.00
+  - Recall: 0.99
+  - MCC: 0.99
   - DSC: 0.77
-  - HD95: 0.01
+  - HD95: 0.02
   - VS: 0.77
 - random-is-rv: Segmentations with random shapes at similar locations with random labels
-  - Precision: 0.06
-  - Recall: 0.06
-  - MCC: 0.05
+  - Precision: 0.04
+  - Recall: 0.05
+  - MCC: 0.02
   - DSC: 0.01
   - HD95: 0.98
-  - VS: 0.02
+  - VS: 0.01

@@ -64,7 +64,7 @@ The TL;DR is:
   - For the ranking the Precision, Recall and MCC values are averaged across classes.
 - Task two: Instance Segmentation
   - Expected outputs: 3D (multi-)instance location segmentation masks.
-  - Unique values are extracted from both the Pred and GT and classification is evaluated as above.
+  - The GT and predicted masks are binarized for each class, a TP = IoU > 0, FN = Present in GT but not in Pred and not TP, an FP = present in Pred not in GT and not TP, TN = N labels in GT - (TP+FN).
   - Segmentation is evaluated globally for the entire volume, **not on an instance level**. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
 
 ### Run Locally
