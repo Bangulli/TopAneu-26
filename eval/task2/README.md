@@ -3,7 +3,7 @@
 Task 2 is an instance segmentation task. Expected outputs are .mha volumes with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. Segmentation metrics (DSC, VS, HD95) are only computed when either the GT or the Prediction contains instances of the respective class. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TP, FN and FP in that class.
 
 ## Method
-At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. The GT and predicted masks are binarized for each class, a TP is present if the intersection is > 0, FN = the label is present in GT but not a TP, FP = the label is present in Pred but a TP, TN = N labels in GT - (TP+FN).
+At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. The GT and predicted masks are binarized for each class, a TP is present if the intersection is > 0, FN = the label is present in GT but not a TP, FP = the label is present in Pred but not a TP, TN = N labels in GT - (TP+FN).
 
 Segmentation metrics are computed on a **volume** level, **disregarding instances**. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
 

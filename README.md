@@ -20,7 +20,7 @@ Please note that this is a supplementary pack to the [Grand Challenge documentat
 
 ## Templates
 
-Each template contains two scritps:
+Each template contains two scripts:
  - _main.py_: Contains a set of helper functions and handles data I/O and serves images to inference functions as **Numpy Arrays**
  - _inference.py_: Contains the actual inference code for you to manipulate
 
@@ -68,7 +68,7 @@ The TL;DR is:
   - Segmentation is evaluated globally for the entire volume, **not on an instance level**. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
 
 ### Run Locally
-Similar to the [Templates](#templates) bash scripts are provided to run the evaluation containers locally as they would be run on GC. If you want to run the evaluation locally you can prepare the data by placing the GT files in `./eval/task[1/2]/ground_truth/[location_jsons/location_masks]` and the predicted files in subdirectories in `./eval/task[1/2]/test/input/`. Notably the input subdiretories need to fit to the convention of the specific task and contain a `predictions.json` file to match the random UIDs to the GT data. For Task 1: `./eval/task1/test/input/[UID]/output/predicted-aneurysm-location.json`; For Task 2: `./eval/task2/test/input/[UID]/output/images/aneurysm-segmentation/[UID].mha`. The `predictions.json` must map the UID to the actual filename of the sample image used to predict the output and is a list of prediction entries. Take a look at the `get_predictions_entry` function in the test scripts ([task1](eval/task1/test_evaluations/test.py), [task2](eval/task2/test_evaluations/test.py)) used to check the robustness of the methods.
+Similar to the [Templates](#templates) bash scripts are provided to run the evaluation containers locally as they would be run on GC. If you want to run the evaluation locally you can prepare the data by placing the GT files in `./eval/task[1/2]/ground_truth/[location_jsons/location_masks]` and the predicted files in subdirectories in `./eval/task[1/2]/test/input/`. Notably the input subdiretories need to fit to the convention of the specific task and contain a `predictions.json` file to match the random UIDs to the GT data. For Task 1: `./eval/task1/test/input/[UID]/output/predicted-aneurysm-locations.json`; For Task 2: `./eval/task2/test/input/[UID]/output/images/aneurysm-segmentation/[UID].mha`. The `predictions.json` must map the UID to the actual filename of the sample image used to predict the output and is a list of prediction entries. Take a look at the `get_predictions_entry` function in the test scripts ([task1](eval/task1/test_evaluations/test.py), [task2](eval/task2/test_evaluations/test.py)) used to check the robustness of the methods.
 
 
 ## Now What?
