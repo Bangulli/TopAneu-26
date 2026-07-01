@@ -5,8 +5,8 @@ from pathlib import Path
 
 def load_gt(fn):
     dir = Path("/opt/ml/input/data/ground_truth/location_jsons")
-    if ".nii.gz" in fn: fn = fn.replace("_0000.nii.gz", ".json")
-    elif ".mha" in fn: fn = fn.replace("_0000.mha", ".json")
+    if ".nii.gz" in fn: fn = fn.replace("_0000.", ".").replace(".nii.gz", ".json")
+    elif ".mha" in fn: fn = fn.replace("_0000.", ".").replace(".mha", ".json")
     with open(dir/fn, "r") as f:
         ref = json.load(f)
     return ref
@@ -18,7 +18,7 @@ def parse_ref(locs):
     return ref
 
 def evaluation_function(predictions, filename):
-    preds = parse_ref(predictions["locations"])
+    preds = parse_ref(predictions)
     gts = parse_ref(load_gt(filename)["locations"])
     n_aneu = sum(gts.values())
     results = {}

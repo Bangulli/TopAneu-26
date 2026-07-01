@@ -104,7 +104,7 @@ def load_json_file(*, location):
 def write_json_file(*, location, content):
     # Writes a json file
     with open(location, "w") as f:
-        json.dump(content, f, indent=4)
+        f.write(json.dumps(content, indent=4))
 
 
 def load_image_file_as_array(*, location):

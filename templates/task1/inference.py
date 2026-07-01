@@ -12,7 +12,7 @@ def infer_ct(img: np.ndarray) -> dict:
         img (np.ndarray): The image to predict.
 
     Returns:
-        dict: The prediction results, must adhere to the json label schema (example: json_schema.json).
+        list: The detected locations in a list.
     """
     # You can upload data to grandchallenge alongside your container, for example model weights.
     # Your model weights will be extracted to the `model_dir` at runtime on Grand Challenge
@@ -28,8 +28,10 @@ def infer_ct(img: np.ndarray) -> dict:
 
     # For now, let us make bogus predictions
     n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
-    if n_aneu > 0: return {"locations": random.sample(range(1,51), k=n_aneu)}
-    else: return {"locations": []}
+    if n_aneu > 0: preds = random.sample(range(1,51), k=n_aneu)
+    else: preds = []
+
+    return preds
 
 def infer_mr(img: np.ndarray) -> dict:
     """Predicts aneurysm locations in CTA images.
@@ -38,7 +40,7 @@ def infer_mr(img: np.ndarray) -> dict:
         img (np.ndarray): The image to predict.
 
     Returns:
-        dict: The prediction results, must adhere to the json label schema (example: json_schema.json).
+        list: The detected locations in a list.
     """
     # You can upload data to grandchallenge alongside your container, for example model weights.
     # Your model weights will be extracted to the `model_dir` at runtime on Grand Challenge
@@ -54,5 +56,6 @@ def infer_mr(img: np.ndarray) -> dict:
 
     # For now, let us make bogus predictions
     n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
-    if n_aneu > 0: return {"locations": random.sample(range(1,51), k=n_aneu)}
-    else: return {"locations": []}
+    if n_aneu > 0: preds = random.sample(range(1,51), k=n_aneu)
+    else: preds = []
+    return preds

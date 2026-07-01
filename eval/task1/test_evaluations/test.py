@@ -1,21 +1,25 @@
 import json, shutil, os, subprocess, random, uuid
 from pathlib import Path
 
-def generate_json(fn, value="random"):
+def generate_json(fn, value="random", gt_format=False):
     if value == "random":
         n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
         if n_aneu > 0:
             with open(fn, "w") as f:
-                json.dump({"locations": random.sample(range(1,51), k=n_aneu)}, f, indent=4)
+                if gt_format: json.dump({"locations": random.sample(range(1,51), k=n_aneu)}, f, indent=4)
+                else: json.dump(random.sample(range(1,51), k=n_aneu), f, indent=4)
         else:
             with open(fn, "w") as f:
-                json.dump({"locations": []}, f, indent=4)
+                if gt_format : json.dump({"locations": []}, f, indent=4)
+                else: json.dump([], f, indent=4)
     elif value=="one":
         with open(fn, "w") as f:
-            json.dump({"locations": [1]}, f, indent=4)
+            if gt_format: json.dump({"locations": [1]}, f, indent=4)
+            else: json.dump([1], f, indent=4)
     else:
         with open(fn, "w") as f:
-            json.dump({"locations": []}, f, indent=4)
+            if gt_format: json.dump({"locations": []}, f, indent=4)
+            else: json.dump([], f, indent=4)
     
 def get_predictions_entry(id, reffilename, modality):
     return {
@@ -76,7 +80,7 @@ def generate_gts(n):
         center = random.choice([1, 2, 3, 4])
         caseid = "%03d" % (i,)
         fn = f"topaneu_center{center}_{modality}_{caseid}"
-        generate_json(f"../ground_truth/location_jsons/{fn}.json")
+        generate_json(f"../ground_truth/location_jsons/{fn}.json", gt_format=True)
     
 def generate_results_all_correct():
     pred_dir = Path("../test/input")
@@ -96,7 +100,7 @@ def generate_results_all_correct():
             cur_preds = json.load(f)  
         os.makedirs(pred_dir/id/"output")
         with open(pred_dir/id/"output"/"detected-aneurysm-locations.json", "w") as f:
-            json.dump(cur_preds, f, indent=4)
+            json.dump(cur_preds["locations"], f, indent=4)
             
     with open(pred_dir/"predictions.json", "w") as f:
         json.dump(predictions, f, indent=4)
@@ -121,7 +125,7 @@ def generate_results_fiftyfifty():
                 cur_preds = json.load(f)  
             os.makedirs(pred_dir/id/"output")
             with open(pred_dir/id/"output"/"detected-aneurysm-locations.json", "w") as f:
-                json.dump(cur_preds, f, indent=4)
+                json.dump(cur_preds["locations"], f, indent=4)
         else:
             os.makedirs(pred_dir/id/"output")
             generate_json(pred_dir/id/"output"/"detected-aneurysm-locations.json")

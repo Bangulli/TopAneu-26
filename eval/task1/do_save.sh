@@ -42,14 +42,14 @@ echo ""
 
 
 # Create the tarbal
-# echo "= STEP 3 = Packing the ground truth"
-# echo "This can take a while."
-# output_tarball_name="${SCRIPT_DIR}/ground_truth.tar.gz"
+echo "= STEP 3 = Packing the ground truth"
+echo "This can take a while."
+output_tarball_name="${SCRIPT_DIR}/ground_truth.tar.gz"
 
-# tar -czf "$output_tarball_name" -C "${SCRIPT_DIR}/ground_truth" .
-# printf "Saved as: \e[32mground_truth.tar.gz\e[0m\n"
+tar -czf "$output_tarball_name" -C "${SCRIPT_DIR}/ground_truth" .
+printf "Saved as: \e[32mground_truth.tar.gz\e[0m\n"
 
-# echo "==== Done"
-# echo ""
+echo "==== Done"
+echo ""
 
 printf "\e[31mIMPORTANT: Please upload the ground_truth.tar.gz as seperate Ground Truth to your Phase!\e[0m\n"

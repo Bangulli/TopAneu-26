@@ -43,6 +43,20 @@ Then to run the scripts do:
 ```bash
 bash [do_build/do_save/do_test_run].sh
 ```
+
+### Expected container outputs
+
+#### Task1
+A json file containing the detected locations of the sample, formatted as below. **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets.
+```json
+[ 
+	34,
+	35
+]
+```
+#### Task2
+A 3D mask containing the (multi-)instance segmentations as provided in the `location_masks` in the training data, must fit the sample image dimensions!
+
 ## Data
 The data is hosted on [SWITCHDrive](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
 The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_deployment](topaneu_deployment/)
