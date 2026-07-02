@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 import random
 
-def infer_ct(img: np.ndarray) -> dict:
+def infer_ct(img: np.ndarray) -> list:
     """Predicts aneurysm locations in CTA images.
 
     Args:
@@ -33,7 +33,7 @@ def infer_ct(img: np.ndarray) -> dict:
 
     return preds
 
-def infer_mr(img: np.ndarray) -> dict:
+def infer_mr(img: np.ndarray) -> list:
     """Predicts aneurysm locations in CTA images.
 
     Args:

@@ -355,7 +355,7 @@ def sanity():
     
 
 if __name__ == "__main__":
-    # generate_gts(350)
+    generate_gts(350)
     do_test_run("all_correct")
     do_test_run("random-total")
     do_test_run("random-ps-rv")

@@ -1,11 +1,12 @@
 # TopAneu-26 Task 2 evaluation methodology
 
-Task 2 is an instance segmentation task. Expected outputs are .mha volumes with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. Segmentation metrics (DSC, VS, HD95) are only computed when either the GT or the Prediction contains instances of the respective class. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TP, FN and FP in that class.
+Task 2 is an instance segmentation task. Expected outputs are .mha volumes with the detected aneurysm locations. Evaluation metrics **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DSC)**, **Volumetric Similarity (VS)** and **Hausdorff Distance 95th precentile (HD95)** are computed for each class. Submissions are ranked by the average of these metrics across all classes. 
 
 ## Method
 At evaluation time all TP, TN, FP, FN are computed for each class to obtain the classification evaluation. The GT and predicted masks are binarized for each class, a TP is present if the intersection is > 0, FN = the label is present in GT but not a TP, FP = the label is present in Pred but not a TP, TN = N labels in GT - (TP+FN).
 
-Segmentation metrics are computed on a **volume** level, **disregarding instances**. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal).
+Segmentation metrics are computed on a **volume** level, **disregarding instances**. The GT and Predictions are binarized for each class and the metrics are computed. **NOTE** Hausdorff distance is normalized by the diagonal of the image to make it more comparable, in case there is a FN/FP the HD is set to the max possible value (=1 since we normalize by diagonal). Segmentation metrics (DSC, VS, HD95) are only computed when either the GT or the Prediction contains instances of the respective class, otherwise they are counted as 0. To compute the global DSC, VS and HD95 within a given class it is accumulated over all samples and then normalized by the total count of TP, FN and FP in that class. This is done to avoid a bias in the results due to *perfect* all-zero predictions in TN classes.
+
 
 **Example**:
 
@@ -60,7 +61,7 @@ $$
 95th percentile of the longest shortest bidirectional distance between two objects' surfaces.
 
 ## Ranking
-Submissions are ranked by first computing the average of these metrics across all classes and then by the average of the resulting global Precision, Recall and MCC.
+Submissions are ranked by first computing the average of these metrics across all classes and then by the average of the resulting global Precision, Recall, MCC, Dice, Volsim and HD95.
 
 ## Simulations
 The evaluation was tested with simulated data where random images with random spheres were generated and then evaluated under different prediciton conditions. These results as well as the script can be found in [test_evaluations](test_evaluations/).
@@ -93,33 +94,33 @@ The evaluation was tested with simulated data where random images with random sp
   - Recall: 0.50
   - MCC: 0.49
   - DSC: 0.34
-  - HD95: 0.66
+  - HD95: 0.65
   - VS: 0.34
 - random-total: All predictions are randomly placed spheres with random size and classes
-  - Precision: 0.04
-  - Recall: 0.03
-  - MCC: 0.02
+  - Precision: 0.00
+  - Recall: 0.00
+  - MCC: -0.02
   - DSC: 0.00
-  - HD95: 0.99
+  - HD95: 0.97
   - VS: 0.01
 - random-ps-rv: Perfect segmentations with random labels in every object
-  - Precision: 0.04
-  - Recall: 0.03
-  - MCC: 0.02
+  - Precision: 0.02
+  - Recall: 0.02
+  - MCC: 0.00
   - DSC: 0.01
-  - HD95: 0.98
-  - VS: 0.01
+  - HD95: 0.97
+  - VS: 0.02
 - random-is-pv: Segmentations with random shapes at similar locations with perfectly correct labels
   - Precision: 1.00
-  - Recall: 0.99
+  - Recall: 0.98
   - MCC: 0.99
-  - DSC: 0.77
-  - HD95: 0.02
-  - VS: 0.77
+  - DSC: 0.76
+  - HD95: 0.03
+  - VS: 0.76
 - random-is-rv: Segmentations with random shapes at similar locations with random labels
-  - Precision: 0.04
-  - Recall: 0.05
-  - MCC: 0.02
+  - Precision: 0.02
+  - Recall: 0.01
+  - MCC: 0.00
   - DSC: 0.01
-  - HD95: 0.98
+  - HD95: 0.97
   - VS: 0.01

@@ -16,29 +16,29 @@ echo "==== Done"
 echo ""
 
 # Get the build information from the Docker image tag
-# build_timestamp=$( docker inspect --format='{{ .Created }}' "$DOCKER_IMAGE_TAG")
+build_timestamp=$( docker inspect --format='{{ .Created }}' "$DOCKER_IMAGE_TAG")
 
-# if [ -z "$build_timestamp" ]; then
-#     echo "Error: Failed to retrieve build information for container $DOCKER_IMAGE_TAG"
-#     exit 1
-# fi
+if [ -z "$build_timestamp" ]; then
+    echo "Error: Failed to retrieve build information for container $DOCKER_IMAGE_TAG"
+    exit 1
+fi
 
-# # Format the build information to remove special characters
-# formatted_build_info=$(echo $build_timestamp | sed -E 's/(.*)T(.*)\..*Z/\1_\2/' | sed 's/[-,:]/-/g')
+# Format the build information to remove special characters
+formatted_build_info=$(echo $build_timestamp | sed -E 's/(.*)T(.*)\..*Z/\1_\2/' | sed 's/[-,:]/-/g')
 
-# # Set the output filename with timestamp and build information
-# output_filename="${DOCKER_IMAGE_TAG}_${formatted_build_info}.tar.gz"
-# output_path="${SCRIPT_DIR}/$output_filename"
+# Set the output filename with timestamp and build information
+output_filename="${DOCKER_IMAGE_TAG}_${formatted_build_info}.tar.gz"
+output_path="${SCRIPT_DIR}/$output_filename"
 
-# # Save the Docker-container image and gzip it
-# echo "= STEP 2 = Saving the image"
-# echo "This can take a while."
+# Save the Docker-container image and gzip it
+echo "= STEP 2 = Saving the image"
+echo "This can take a while."
 
-# docker save "$DOCKER_IMAGE_TAG" | gzip -c > "$output_path"
-# printf "Saved as: \e[32m${output_filename}\e[0m\n"
+docker save "$DOCKER_IMAGE_TAG" | gzip -c > "$output_path"
+printf "Saved as: \e[32m${output_filename}\e[0m\n"
 
-# echo "==== Done"
-# echo ""
+echo "==== Done"
+echo ""
 
 
 # Create the tarbal

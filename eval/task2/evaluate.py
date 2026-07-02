@@ -43,6 +43,8 @@ def iou_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float:
     Returns:
         float: The iou between a and b
     """
+    if not np.any(img1) and not np.any(img2): return 1 # both 0 is perfect seg
+    elif not np.any(img1) or not np.any(img2): return 0 # only one zero is the worst possible segmentation
     return (np.bitwise_and(img1, img2).sum()/(np.bitwise_or(img1, img2).sum())+eps)
 
 def dice_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float:
@@ -56,6 +58,8 @@ def dice_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float:
     Returns:
         float: The dice score between a and b
     """
+    if not np.any(img1) and not np.any(img2): return 1 # both 0 is perfect seg
+    elif not np.any(img1) or not np.any(img2): return 0 # only one zero is the worst possible segmentation
     return ((2*np.bitwise_and(img1, img2).sum())/(img1.sum() + img2.sum() + eps))
 
 def volsim_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float: # as described in https://pmc.ncbi.nlm.nih.gov/articles/PMC4533825/pdf/12880_2015_Article_68.pdf
@@ -69,6 +73,8 @@ def volsim_fn(img1: np.ndarray, img2: np.ndarray, eps: float=1e-6) -> float: # a
     Returns:
         float: The volumetric similarity between a and b
     """
+    if not np.any(img1) and not np.any(img2): return 1 # both 0 is perfect seg
+    elif not np.any(img1) or not np.any(img2): return 0 # only one zero is the worst possible segmentation
     return 1 - (abs(img1.sum()-img2.sum())/(img1.sum()+img2.sum()+eps))
 
 def get_surface(img: np.ndarray) -> np.ndarray:
@@ -96,8 +102,8 @@ def hd_fn(img1: np.ndarray, img2: np.ndarray, perc: int=95, norm: bool=True) -> 
         float: The perc percentile of the bidirectional HD between a and b
     """
     diag = np.linalg.norm(img1.shape)
-    if ~np.any(img1) and ~np.any(img2): return 0 # both 0 is perfect seg
-    elif ~np.any(img1) or ~np.any(img2): return 1 if norm else diag # only one zero is the worst possible segmentation
+    if not np.any(img1) and not np.any(img2): return 0 # both 0 is perfect seg
+    elif not np.any(img1) or not np.any(img2): return 1 if norm else diag # only one zero is the worst possible segmentation
         
     coords_a = np.argwhere(get_surface(img1))
     coords_b = np.argwhere(get_surface(img2))
@@ -236,6 +242,8 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict:
     """
     gt = load_gt(filename)
     
+    assert predictions.shape == gt.shape, f"Shape missmatch: GT={gt.shape}; Prediction={predictions.shape}"
+    
     results = {}
     gts = [elem for elem in np.unique(gt).tolist() if elem != 0]
     n_aneu = len(gts)
@@ -263,7 +271,7 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict:
             results[f"DICE_{cls}"] = dice_fn(gt==cls, predictions==cls)
             results[f"HD95_{cls}"] = hd_fn(gt==cls, predictions==cls, 95, True)
             results[f"VOLSIM_{cls}"] = volsim_fn(gt==cls, predictions==cls)
-        else:
+        else: ##NOTE these are true negatives, this means all segmentations are correct and should technically be DSC=1, VS=1, HD95=0, but this would really bias the evaluation, so 0s are counted and the values are only averaged for TP, FP and FN!
             results[f"DICE_{cls}"] = 0
             results[f"HD95_{cls}"] = 0
             results[f"VOLSIM_{cls}"] = 0

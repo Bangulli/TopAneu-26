@@ -26,7 +26,7 @@ def infer_ct(img: np.ndarray) -> np.ndarray:
         print(f.read())
 
     # For now, let us make bogus predictions
-    return np.zeros_like(img)
+    return np.zeros_like(img, dtype=np.uint8)
 
 def infer_mr(img: np.ndarray) -> np.ndarray:
     """Runs inference on MRA images
@@ -50,4 +50,4 @@ def infer_mr(img: np.ndarray) -> np.ndarray:
         print(f.read())
 
     # For now, let us make bogus predictions
-    return np.zeros_like(img)
+    return np.zeros_like(img, dtype=np.uint8)
