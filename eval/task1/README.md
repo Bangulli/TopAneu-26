@@ -29,7 +29,7 @@ $$
 **MCC** is computed for every class using:
 
 $$
-\text{MCC} = \frac{TN*TP-FN*FP}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\text{MCC} = \frac{TN \times TP-FN \times FP}{\sqrt{(TP+FP)\times(TP+FN)\times(TN+FP)\times(TN+FN)}}
 $$
 
 ## Ranking
@@ -48,7 +48,7 @@ The evaluation was tested with simulated data where random location jsons were g
   - Precision: 0.00
   - Recall: 0.02
   - MCC: 0.00
-- all_zero: all preditions are empty
+- all_zero: all predictions are empty
   - Precision: 0.00
   - Recall: 0.00
   - MCC: 0.00

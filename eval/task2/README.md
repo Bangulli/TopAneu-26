@@ -41,7 +41,7 @@ $$
 **MCC** is computed for every class using:
 
 $$
-\text{MCC} = \frac{TN \times TP - FN \times FP}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\text{MCC} = \frac{TN \times TP - FN \times FP}{\sqrt{(TP+FP)\times(TP+FN)\times(TN+FP)\times(TN+FN)}}
 $$
 
 **DSC** is computed for every class using:
