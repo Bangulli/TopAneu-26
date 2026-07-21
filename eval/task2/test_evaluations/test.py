@@ -334,26 +334,6 @@ def do_test_run(mode=""):
     
     shutil.move("../test/output/metrics.json", f"outputs-{mode}.json")
 
-def get_surface(img):
-    return img & ~binary_erosion(img)
-
-def hd_fn(img1, img2, perc=95):
-    coords_a = np.argwhere(get_surface(img1))
-    coords_b = np.argwhere(get_surface(img2))
-    shortest_distances = []
-    for a in coords_a:
-        distances = np.linalg.norm(coords_b - a, axis=1)
-        shortest_distances.append(np.min(distances))
-    return np.percentile(shortest_distances, perc)
-
-def sanity():
-    imga = get_object(10)
-    imgb = np.zeros_like(imga)
-    objb = get_object(5)
-    imgb[0:5, 0:5, 0:5]=objb
-    print(hd_fn(imga, imgb))
-    
-
 if __name__ == "__main__":
     generate_gts(350)
     do_test_run("all_correct")

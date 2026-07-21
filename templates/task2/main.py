@@ -51,7 +51,7 @@ def run():
 def interf0_handler():
     # Read the input
 
-    input_head_ct_angiography = load_image_file_as_array(
+    input_head_ct_angiography = load_image_file(
         location=INPUT_PATH / "images/head-ct-angio",
     )
 
@@ -59,9 +59,9 @@ def interf0_handler():
 
     # Save your output
 
-    write_array_as_image_file(
+    write_image_file(
         location=OUTPUT_PATH / "images/aneurysm-segmentation",
-        array=output_aneurysm_segmentation,
+        image=output_aneurysm_segmentation,
     )
 
     return 0
@@ -70,7 +70,7 @@ def interf0_handler():
 def interf1_handler():
     # Read the input
 
-    input_head_mr_angiography = load_image_file_as_array(
+    input_head_mr_angiography = load_image_file(
         location=INPUT_PATH / "images/head-mr-angio",
     )
 
@@ -78,9 +78,9 @@ def interf1_handler():
 
     # Save your output
 
-    write_array_as_image_file(
+    write_image_file(
         location=OUTPUT_PATH / "images/aneurysm-segmentation",
-        array=output_aneurysm_segmentation,
+        image=output_aneurysm_segmentation,
     )
 
     return 0
@@ -102,7 +102,7 @@ def load_json_file(*, location):
         return json.loads(f.read())
 
 
-def load_image_file_as_array(*, location):
+def load_image_file(*, location):
     # Use SimpleITK to read a file
     input_files = (
         glob.glob(str(location / "*.tif"))
@@ -112,16 +112,14 @@ def load_image_file_as_array(*, location):
     result = SimpleITK.ReadImage(input_files[0])
 
     # Convert it to a Numpy array
-    return SimpleITK.GetArrayFromImage(result)
+    return result
 
 
-def write_array_as_image_file(*, location, array):
+def write_image_file(*, location, image):
     location.mkdir(parents=True, exist_ok=True)
 
     # You may need to change the suffix to .tif to match the expected output
     suffix = ".mha"
-
-    image = SimpleITK.GetImageFromArray(array)
     SimpleITK.WriteImage(
         image,
         location / f"output{suffix}",

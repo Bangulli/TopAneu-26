@@ -50,7 +50,7 @@ def run():
 def interf0_handler():
     # Read the input
 
-    input_head_ct_angiography = load_image_file_as_array(
+    input_head_ct_angiography = load_image_file(
         location=INPUT_PATH / "images/head-ct-angio",
     )
 
@@ -69,7 +69,7 @@ def interf0_handler():
 def interf1_handler():
     # Read the input
 
-    input_head_mr_angiography = load_image_file_as_array(
+    input_head_mr_angiography = load_image_file(
         location=INPUT_PATH / "images/head-mr-angio",
     )
 
@@ -107,7 +107,7 @@ def write_json_file(*, location, content):
         f.write(json.dumps(content, indent=4))
 
 
-def load_image_file_as_array(*, location):
+def load_image_file(*, location):
     # Use SimpleITK to read a file
     input_files = (
         glob.glob(str(location / "*.tif"))
@@ -117,7 +117,7 @@ def load_image_file_as_array(*, location):
     result = SimpleITK.ReadImage(input_files[0])
 
     # Convert it to a Numpy array
-    return SimpleITK.GetArrayFromImage(result)
+    return result
 
 if __name__ == "__main__":
     raise SystemExit(run())

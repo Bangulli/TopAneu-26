@@ -4,12 +4,13 @@ This is an example for an inference function for your models
 import numpy as np
 from pathlib import Path
 import random
+import SimpleITK as sitk
 
-def infer_ct(img: np.ndarray) -> list:
+def infer_ct(img: sitk.Image) -> list:
     """Predicts aneurysm locations in CTA images.
 
     Args:
-        img (np.ndarray): The image to predict.
+        img (sitk.Image): The image to predict.
 
     Returns:
         list: The detected locations in a list.
@@ -33,11 +34,11 @@ def infer_ct(img: np.ndarray) -> list:
 
     return preds
 
-def infer_mr(img: np.ndarray) -> list:
+def infer_mr(img: sitk.Image) -> list:
     """Predicts aneurysm locations in CTA images.
 
     Args:
-        img (np.ndarray): The image to predict.
+        img (sitk.Image): The image to predict.
 
     Returns:
         list: The detected locations in a list.
