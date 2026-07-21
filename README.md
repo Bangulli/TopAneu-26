@@ -21,7 +21,7 @@ Please note that this is a supplementary pack to the [Grand Challenge documentat
 ## Templates
 
 Each template contains two scripts:
- - _main.py_: Contains a set of helper functions and handles data I/O and serves images to inference functions as **Numpy Arrays**
+ - _main.py_: Contains a set of helper functions and handles data I/O and serves images to inference functions as **SimpleITK image objects**
  - _inference.py_: Contains the actual inference code for you to manipulate
 
 **NOTE** This is just a template, any container that mimics these inputs and outputs would work, however we recommend sticking to this template and only integrating your code in the _inference.py_ scripts, as _main.py_ contains many helper functions provided by GrandChallenge, that work to serve data to your implementations.
