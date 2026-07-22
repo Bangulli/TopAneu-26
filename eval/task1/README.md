@@ -53,10 +53,10 @@ The evaluation was tested with simulated data where random location jsons were g
   - Recall: 0.00
   - MCC: 0.00
 - random: random predictions with a random amount of predictions with random labels
-  - Precision: 0.03
-  - Recall: 0.03
-  - MCC: 0.01
+  - Precision: 0.02
+  - Recall: 0.02
+  - MCC: 0.00
 - 50random50correct: 50% of samples are perfect results, the other 50% random generated as above.
-  - Precision: 0.48
-  - Recall: 0.48
-  - MCC: 0.46
+  - Precision: 0.46
+  - Recall: 0.46
+  - MCC: 0.44

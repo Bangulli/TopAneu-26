@@ -6,8 +6,8 @@ def generate_json(fn, value="random", gt_format=False):
         n_aneu = random.choices([0, 1, 2, 3, 4], weights=[0.2, 0.5, 0.15, 0.1, 0.05], k=1)[0]
         if n_aneu > 0:
             with open(fn, "w") as f:
-                if gt_format: json.dump({"locations": random.sample(range(1,51), k=n_aneu)}, f, indent=4)
-                else: json.dump(random.sample(range(1,51), k=n_aneu), f, indent=4)
+                if gt_format: json.dump({"locations": random.sample(range(1,53), k=n_aneu)}, f, indent=4)
+                else: json.dump(random.sample(range(1,53), k=n_aneu), f, indent=4)
         else:
             with open(fn, "w") as f:
                 if gt_format : json.dump({"locations": []}, f, indent=4)
@@ -211,6 +211,7 @@ def do_test_run(mode=""):
     shutil.move("../test/output/metrics.json", f"outputs-{mode}.json")
 
 if __name__ == "__main__":
+    generate_gts(350)
     do_test_run("all_correct")
     do_test_run("random")
     do_test_run("all_zero")

@@ -6,6 +6,8 @@ from typing import Union, List, Tuple, Literal
 from scipy.ndimage import label, binary_erosion
 from scipy.spatial import cKDTree
 
+N_CLASSES = 52
+
 ### copied from main
 def load_image_file_as_array(location: Path) -> np.ndarray:
     """Load an image as a numpy array using sitk
@@ -131,7 +133,7 @@ def extended_label(img: np.ndarray) -> Tuple[List[np.ndarray], List[int], int]:
     ccs = []
     ns = []
     present_cls = np.unique(img).tolist()
-    for cls in range(1, 51):
+    for cls in range(1, N_CLASSES+1):
         if cls not in present_cls:
             ccs.append(None)
             ns.append(0)
@@ -181,7 +183,7 @@ def evaluation_function_instance_level(predictions: np.ndarray, filename: str) -
     pred_ccs, pred_n_per_aneu, pred_n_aneu = extended_label(predictions)
     
     results = {}
-    for cls in range(1, 51):
+    for cls in range(1, N_CLASSES+1):
         gt = gt_ccs[cls-1]
         pred = pred_ccs[cls-1]
         
@@ -248,7 +250,7 @@ def evaluation_function(predictions: np.ndarray, filename: str) -> dict:
     gts = [elem for elem in np.unique(gt).tolist() if elem != 0]
     n_aneu = len(gts)
 
-    for cls in range(1, 51): 
+    for cls in range(1, N_CLASSES+1): 
         ## check for presence and tp
         is_in_pred = np.any(predictions==cls)
         is_in_gt = np.any(gt==cls)
@@ -301,7 +303,7 @@ def evaluation_aggregation(metrics: List[dict], eps: float=1e-6) -> dict: # epsi
         if k == 'INSTANCE_LEVEL':continue
         aggregates[k]=sum([samp[k] for samp in metrics])
     ## compute per location prec, rec, mcc
-    for i in range(1, 51):
+    for i in range(1, N_CLASSES+1):
         
         # comp cls scores
         aggregates[f"PRECISION_{i}"] = aggregates[f"TP_{i}"]/(aggregates[f"TP_{i}"]+aggregates[f"FP_{i}"]+eps)
@@ -334,11 +336,11 @@ def evaluation_average(metrics: dict) -> dict:
         dict: The average-across-classes metrics
     """
     averages = {"PRECISION": 0, "RECALL":0, "MCC":0, "DICE":0, "HD95":0, "VOLSIM":0}
-    for i in range(1, 51):
+    for i in range(1, N_CLASSES+1):
         averages["PRECISION"]+=metrics[f"PRECISION_{i}"]
         averages["RECALL"]+=metrics[f"RECALL_{i}"]
         averages["MCC"]+=metrics[f"MCC_{i}"]
         averages["DICE"]+=metrics[f"DICE_{i}"]
         averages["HD95"]+=metrics[f"HD95_{i}"]
         averages["VOLSIM"]+=metrics[f"VOLSIM_{i}"]
-    return {k:v/50 for k, v in averages.items()}
+    return {k:v/N_CLASSES for k, v in averages.items()}

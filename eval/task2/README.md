@@ -101,8 +101,8 @@ The evaluation was tested with simulated data where random images with random sp
   - Recall: 0.00
   - MCC: -0.02
   - DSC: 0.00
-  - HD95: 0.97
-  - VS: 0.01
+  - HD95: 1.00
+  - VS: 0.00
 - random-ps-rv: Perfect segmentations with random labels in every object
   - Precision: 0.02
   - Recall: 0.02

@@ -19,7 +19,7 @@ def get_object(diameter):
 def add_obj_to_arr(arr, value=None):
     size = random.choice(range(3, 60, 2))
     obj = get_object(size)
-    if value is None: lbl = random.choice(range(1,51))
+    if value is None: lbl = random.choice(range(1,53))
     else: lbl = value
     obj *= lbl
     x, y, z = random.choice(range(0+size, 250)), random.choice(range(0+size, 250)), random.choice(range(0+size, 250))
@@ -62,7 +62,7 @@ def generate_mha_like(fn, ref, value="random", mutate=True):
         for i in range(1, n+1):
             struct = random_morph(cc==i) if mutate else cc==i
             struct = struct.astype(np.uint8)
-            if value == "random": struct *= random.choice(range(1,51))
+            if value == "random": struct *= random.choice(range(53))
             elif value == "one": struct *= 1
             elif value == "match": struct *= np.median(ref[cc==i]).astype(np.uint8)
             virtual_image += struct

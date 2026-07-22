@@ -2,6 +2,8 @@ import numpy as np
 import json, os, math
 from pathlib import Path
 
+N_CLASSES = 52
+
 
 def load_gt(fn):
     dir = Path("/opt/ml/input/data/ground_truth/location_jsons")
@@ -12,7 +14,7 @@ def load_gt(fn):
     return ref
 
 def parse_ref(locs):
-    ref = {i:0 for i in range(1, 51)}
+    ref = {i:0 for i in range(1, N_CLASSES+1)}
     for lbl in locs:
         ref[lbl]+=1
     return ref
@@ -22,7 +24,7 @@ def evaluation_function(predictions, filename):
     gts = parse_ref(load_gt(filename)["locations"])
     n_aneu = sum(gts.values())
     results = {}
-    for cls in range(1, 51): 
+    for cls in range(1, N_CLASSES+1): 
         pred_count = preds[cls]
         gt_count = gts[cls]
         tp = min(pred_count, gt_count)
@@ -42,7 +44,7 @@ def evaluation_aggregation(metrics, eps=1e-6): # epsilons to avoid div by 0 erro
     for k in keys:
         aggregates[k]=sum([samp[k] for samp in metrics])
     ## compute per location prec, rec, mcc
-    for i in range(1, 51):
+    for i in range(1, N_CLASSES+1):
         aggregates[f"PRECISION_{i}"] = aggregates[f"TP_{i}"]/(aggregates[f"TP_{i}"]+aggregates[f"FP_{i}"]+eps)
         aggregates[f"RECALL_{i}"] = aggregates[f"TP_{i}"]/(aggregates[f"TP_{i}"]+aggregates[f"FN_{i}"]+eps)
         mcc_num = aggregates[f"TP_{i}"]*aggregates[f"TN_{i}"] - aggregates[f"FN_{i}"]*aggregates[f"FP_{i}"]
@@ -60,8 +62,8 @@ def evaluation_aggregation(metrics, eps=1e-6): # epsilons to avoid div by 0 erro
 
 def evaluation_average(metrics):
     averages = {"PRECISION": 0, "RECALL":0, "MCC":0}
-    for i in range(1, 51):
+    for i in range(1, N_CLASSES+1):
         averages["PRECISION"]+=metrics[f"PRECISION_{i}"]
         averages["RECALL"]+=metrics[f"RECALL_{i}"]
         averages["MCC"]+=metrics[f"MCC_{i}"]
-    return {k:v/50 for k, v in averages.items()}
+    return {k:v/N_CLASSES for k, v in averages.items()}
