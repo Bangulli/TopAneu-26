@@ -26,7 +26,8 @@ def infer_ct(img: sitk.Image) -> np.ndarray:
         model_dir / "a_tarball_subdirectory" / "some_tarball_resource.txt", "r"
     ) as f:
         print(f.read())
-    res_arr = np.zeros_like(img_arr, dtype=np.uint8)
+                
+    res_arr = np.ones_like(img_arr, dtype=np.uint8)*52
     res = sitk.GetImageFromArray(res_arr)
     res.CopyInformation(img)
 
@@ -54,7 +55,7 @@ def infer_mr(img: sitk.Image) -> np.ndarray:
         model_dir / "a_tarball_subdirectory" / "some_tarball_resource.txt", "r"
     ) as f:
         print(f.read())
-    res_arr = np.zeros_like(img_arr, dtype=np.uint8)
+    res_arr = np.ones_like(img_arr, dtype=np.uint8)*52
     res = sitk.GetImageFromArray(res_arr)
     res.CopyInformation(img)
 
