@@ -90,26 +90,26 @@ The evaluation was tested with simulated data where random images with random sp
   - HD95: 1.00
   - VS: 0.00
 - 50random50correct: 50% of the samples are perfect results the other are randomly placed spheres with random size and classes in the predictions
-  - Precision: 0.51
-  - Recall: 0.50
-  - MCC: 0.49
-  - DSC: 0.34
-  - HD95: 0.65
-  - VS: 0.34
+  - Precision: 0.47
+  - Recall: 0.47
+  - MCC: 0.45
+  - DSC: 0.31
+  - HD95: 0.68
+  - VS: 0.31
 - random-total: All predictions are randomly placed spheres with random size and classes
   - Precision: 0.00
   - Recall: 0.00
   - MCC: -0.02
   - DSC: 0.00
-  - HD95: 1.00
+  - HD95: 0.99
   - VS: 0.00
 - random-ps-rv: Perfect segmentations with random labels in every object
   - Precision: 0.02
   - Recall: 0.02
   - MCC: 0.00
   - DSC: 0.01
-  - HD95: 0.97
-  - VS: 0.02
+  - HD95: 0.98
+  - VS: 0.01
 - random-is-pv: Segmentations with random shapes at similar locations with perfectly correct labels
   - Precision: 1.00
   - Recall: 0.98
@@ -118,9 +118,9 @@ The evaluation was tested with simulated data where random images with random sp
   - HD95: 0.03
   - VS: 0.76
 - random-is-rv: Segmentations with random shapes at similar locations with random labels
-  - Precision: 0.02
-  - Recall: 0.01
-  - MCC: 0.00
+  - Precision: 0.04
+  - Recall: 0.04
+  - MCC: 0.02
   - DSC: 0.01
   - HD95: 0.97
-  - VS: 0.01
+  - VS: 0.02
