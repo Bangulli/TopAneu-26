@@ -91,6 +91,8 @@ def check_topaneu_dir(dir, ignore_vessels=True):
             ## Check correspondence of mask shape
             if cur_lmask is not None:
                 cur_lmask_info = get_image_info(cur_lmask)
+                if sitk.GetArrayFromImage(cur_lmask).dtype==np.uint8: cur_report['lmask_is_uint8']=True
+                else: cur_report['lmask_is_uint8']=False; ok=False
                 for k in cur_img_info.keys():
                     img_v = cur_img_info[k]
                     msk_v = cur_lmask_info[k]
@@ -99,6 +101,8 @@ def check_topaneu_dir(dir, ignore_vessels=True):
                     
             if cur_tmask is not None:
                 cur_tmask_info = get_image_info(cur_tmask)
+                if sitk.GetArrayFromImage(cur_tmask).dtype==np.uint8: cur_report['tmask_is_uint8']=True
+                else: cur_report['tmask_is_uint8']=False; ok=False
                 for k in cur_img_info.keys():
                     img_v = cur_img_info[k]
                     msk_v = cur_tmask_info[k]
@@ -108,6 +112,8 @@ def check_topaneu_dir(dir, ignore_vessels=True):
             if not ignore_vessels:    
                 if cur_vmask is not None:
                     cur_vmask_info = get_image_info(cur_vmask)
+                    if sitk.GetArrayFromImage(cur_vmask).dtype==np.uint8: cur_report['vmask_is_uint8']=True
+                    else: cur_report['vmask_is_uint8']=False; ok=False
                     for k in cur_img_info.keys():
                         img_v = cur_img_info[k]
                         msk_v = cur_vmask_info[k]
