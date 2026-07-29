@@ -29,14 +29,11 @@ def check_checksums(checksum_dir, image_dir, block_size=65563):
     print(f"\033[32;1mSUCCESS:\033[0m All checksums matched between checksums in {checksum_dir} and images in {image_dir}")
 
 if __name__ == "__main__":
-    make_checksums_for_dir("topaneu_deployment/images")
-    check_checksums("topaneu_deployment/images", "topaneu_deployment/images")
-    make_checksums_for_dir("topaneu_deployment/location_masks")
-    check_checksums("topaneu_deployment/location_masks", "topaneu_deployment/location_masks")
-    make_checksums_for_dir("topaneu_deployment/type_masks")
-    check_checksums("topaneu_deployment/type_masks", "topaneu_deployment/type_masks")
-    make_checksums_for_dir("topaneu_deployment/vessel_masks")
-    check_checksums("topaneu_deployment/vessel_masks", "topaneu_deployment/vessel_masks")
-
-
-
+    make_checksums_for_dir("topaneu_release/images")
+    check_checksums("topaneu_release/images", "topaneu_release/images")
+    make_checksums_for_dir("topaneu_release/location_masks")
+    check_checksums("topaneu_release/location_masks", "topaneu_release/location_masks")
+    make_checksums_for_dir("topaneu_release/type_masks")
+    check_checksums("topaneu_release/type_masks", "topaneu_release/type_masks")
+    make_checksums_for_dir("topaneu_release/vessel_masks")
+    check_checksums("topaneu_release/vessel_masks", "topaneu_release/vessel_masks")

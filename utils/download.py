@@ -13,9 +13,9 @@ with requests.get(url, stream=True) as r:
 with zipfile.ZipFile("TopAneu-26.zip") as zip:
     zip.extractall("tmp")
     
-os.rename("tmp/topaneu_deployment", "TopAneu-26")
+os.rename("tmp/topaneu_release", "TopAneu-26")
 os.rename("TopAneu-26.zip", "TopAneu-26/TopAneu-26.zip")
 os.rmdir("tmp")
     
 for dir in ["images", "location_masks", "type_masks", "vessel_masks"]:
-    check_checksums(f"topaneu_deployment/{dir}", f"TopAneu-26/{dir}")
+    check_checksums(f"topaneu_release/{dir}", f"TopAneu-26/{dir}")

@@ -4,6 +4,7 @@ from tqdm import tqdm
 import SimpleITK as sitk
 import numpy as np
 from pprint import pprint
+from scipy.ndimage import label
 
 def get_image_info(img: sitk.Image) -> dict:
     return {
@@ -108,6 +109,12 @@ def check_topaneu_dir(dir, ignore_vessels=True):
                     msk_v = cur_tmask_info[k]
                     if img_v == msk_v: cur_report[f"{k}s_match_tmask"]=True
                     else: cur_report[f"{k}s_match_tmask"]=False; ok=False
+                    
+            if cur_lmask is not None and cur_tmask is not None:
+                cc1, n1 = label(sitk.GetArrayFromImage(cur_lmask))
+                cc2, n2 = label(sitk.GetArrayFromImage(cur_tmask))
+                if n1==n2: cur_report['N_components_match_tmask_lmask']=True
+                else:cur_report['N_components_match_tmask_lmask']=False; ok=False
             
             if not ignore_vessels:    
                 if cur_vmask is not None:
@@ -135,5 +142,5 @@ def check_topaneu_dir(dir, ignore_vessels=True):
         json.dump(report, f, indent=4)
 
 if __name__ == "__main__":
-    check_topaneu_dir(Path("Datasets/TopAneu/Test"))
-    check_topaneu_dir(Path("Datasets/TopAneu/Train"), ignore_vessels=False)
+    #check_topaneu_dir(Path("/home/tue20260926/tue/Documents/Datasets/TopAneu/Test"))
+    check_topaneu_dir(Path("/home/tue20260926/tue/Documents/Datasets/TopAneu/Train"), ignore_vessels=False)
