@@ -12,15 +12,14 @@ In total, the TopAneu training dataset contains 417 scans from 409 unique patien
 
 The center IDs correspond to the following data sources:
 
-| Source                                  | Country / Type  | Center ID |
-| --------------------------------------- | --------------- | --------- |
-| Lausanne University Hospital, CHUV      | Switzerland     | center-1  |
-| Geneva University Hospitals, HUG        | Switzerland     | center-2  |
-| University Medical Center Utrecht, UMCU | The Netherlands | center-3  |
-| Mie Chuo Medical Center, Mie-Chuo       | Japan           | center-4  |
-| Public datasets: INSTED and OpenNeuro   | Public data     | center-5  |
+| Source                                      | Country / Type | Center ID | Modalities | Patients |
+|:--------------------------------------------|:---------------|:----------|:-----------|---------:|
+| Lausanne University Hospital (CHUV)         | Switzerland    | center-1  | MRA        |      200 |
+| Geneva University Hospitals (HUG)           | Switzerland    | center-2  | CTA, MRA   |       87 |
+| Mie Chuo Medical Center                     | Japan          | center-4  | CTA        |       54 |
+| Public datasets: INSTED and OpenNeuro       | Public data    | center-5  | MRA        |       68 |
 
-Data from center-3 are reserved for the test set and are not included in the released training data.
+Data from center-3 (University Medical Center Utrecht, UMCU) are reserved for the test set and are not included in the released training data.
 
 The center-5 data are derived from two public datasets:
 
@@ -62,7 +61,7 @@ topaneu/
 ```
 
 The filenames for the images and labels are named in the following schema: `topaneu_{centerID}_{modality}_{patientID}`.
-Center-4 data contains a few patients with longitudinal follow-up scans, and their filenames have an appended count number.
+Center-4 data contains a few patients with longitudinal scans, and their filenames have an appended count number (unknown order).
 
 **Data folder description:**
 

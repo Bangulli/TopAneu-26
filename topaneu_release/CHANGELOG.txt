@@ -1,0 +1,53 @@
+topaneu_center2_mr_002 — Changed L M1 trunk to L M1-M2 junction; MCA location mapping update
+topaneu_center2_mr_004 — Improved defacing; added missing aneurysm BA tip; changed R M1 trunk to R M1-M2 junction; MCA location mapping update
+topaneu_center2_mr_007 — Improved defacing; changed R M1-M2 junction to R M1 early bifurcation
+topaneu_center2_mr_010 — Improved defacing; corrected R ICA C6-nonOA mask
+topaneu_center2_mr_011 — Improved cropping
+topaneu_center2_mr_012 — Improved defacing; changed R M1 trunk to R M1 early bifurcation
+topaneu_center2_mr_013 — Improved defacing
+topaneu_center2_mr_018 — Improved defacing
+topaneu_center2_mr_020 — Improved defacing
+topaneu_center2_mr_025 — MCA location mapping update
+topaneu_center2_mr_032 — Improved defacing; added missing aneurysm  R M1 early bifurcation; changed L M1 trunk to R M1-M2 junction; MCA location mapping update
+topaneu_center2_mr_035 — Changed R M1 trunk to R M1 early bifurcation
+topaneu_center2_mr_042 — Changed L ICA infraclinoid C1-C5 to L ICA C6-nonOA
+topaneu_center2_mr_042 — Changed L ICA infraclinoid C1-C5 to L ICA C6-nonOA
+topaneu_center2_mr_044 — Improved defacing
+topaneu_center2_mr_047 — MCA location mapping update
+topaneu_center2_mr_048 — MCA location mapping update
+topaneu_center2_mr_049 — MCA location mapping update
+topaneu_center2_mr_050 — MCA location mapping update
+topaneu_center2_mr_051 — MCA location mapping update
+topaneu_center2_mr_055 — Improved defacing
+topaneu_center2_mr_056 — Improved defacing; MCA location mapping update
+topaneu_center2_mr_057 — Improved defacing
+topaneu_center2_mr_074 — Improved defacing; MCA location mapping update
+topaneu_center2_mr_077 — Improved defacing
+topaneu_center2_mr_078 — Changed R ICA C7-terminus to R A1; MCA location mapping update
+topaneu_center2_mr_079 — MCA location mapping update
+topaneu_center2_mr_080 — Improved defacing; changed L ICA C7-Pcom-junction to BA tip; added 2 missing aneurysms (R A3, R M1-M2 junction); MCA location mapping update
+topaneu_center2_mr_085 — Changed R ICA C7-AChA-junction to L ICA C7-AChA-junction; MCA location mapping update
+topaneu_center4_ct_002 — MCA location mapping update
+topaneu_center4_ct_005 — Changed R ICA C7-Pcom-junction to L ICA C7-Pcom-junction
+topaneu_center4_ct_008 — Renamed to 008_1; changed R M1-M2 junction to R M1 early bifurcation
+topaneu_center4_ct_009 — Changed L M1-M2 junction to L M1 early bifurcation
+topaneu_center4_ct_034 — Renamed to 034_1
+topaneu_center4_ct_042 — Renamed to 042_1; MCA location mapping update
+topaneu_center4_ct_047 — MCA location mapping update
+topaneu_center4_ct_048 — MCA location mapping update
+topaneu_center4_ct_051 — Renamed to 051_1
+topaneu_center4_ct_057 — Changed L M1 trunk to L M1 early bifurcation; MCA location mapping update
+topaneu_center4_ct_062 — Renamed to 062_1; Changed R M1 trunk to R M1-M2 junction; MCA location mapping update
+topaneu_center4_ct_065 — MCA location mapping update
+topaneu_center4_ct_066 — Renamed to 062_2; Changed R M1 trunk  to R M1-M2 junction; MCA location mapping update
+topaneu_center4_ct_069 — Renamed to 025_2; MCA location mapping update
+topaneu_center4_ct_071 — Renamed to 008_2; changed R M1-M2 junction to R M1 early bifurcation
+topaneu_center4_ct_073 — Renamed  to 042_2; changed R M1 trunk to R M1 early bifurcation; MCA location mapping update
+topaneu_center4_ct_074 — Added missing aneurysm L ICA C6-nonOA
+topaneu_center4_ct_094 — MCA location mapping update
+topaneu_center4_ct_097 — Added missing aneurysm R M1-M2 junction; MCA location mapping update
+topaneu_center4_ct_101 — MCA location mapping update
+topaneu_center4_ct_105 — MCA location mapping update
+topaneu_center4_ct_107 — Changed L M1-M2 junction to L M1 early bifurcation
+topaneu_center4_ct_108 — Added missing aneurysm R ICA C7-Pcom-junction
+topaneu_center4_ct_122 — MCA location mapping update
