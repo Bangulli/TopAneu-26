@@ -33,7 +33,7 @@ def check_topaneu_dir(dir, ignore_vessels=True):
         report = {}
         report["directory"] = str(dir)
         report["action_needed"] = {}
-        images = os.listdir(dir/"images")
+        images = [i for i in os.listdir(dir/"images") if i.endswith('.nii.gz')]
     
     
     jsons = os.listdir(dir/"location_jsons")
@@ -142,5 +142,4 @@ def check_topaneu_dir(dir, ignore_vessels=True):
         json.dump(report, f, indent=4)
 
 if __name__ == "__main__":
-    #check_topaneu_dir(Path("/home/tue20260926/tue/Documents/Datasets/TopAneu/Test"))
-    check_topaneu_dir(Path("/home/tue20260926/tue/Documents/Datasets/TopAneu/Train"), ignore_vessels=False)
+    check_topaneu_dir(Path("TopAneu-26"), ignore_vessels=False)
