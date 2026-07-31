@@ -47,9 +47,11 @@
         "L-4.5 Distal ACA branches": 44,
         "R-5.1 M1 trunk": 45,
         "L-5.1 M1 trunk": 46,
-        "R-5.2 M1-M2 junction": 47,
-        "L-5.2 M1-M2 junction": 48,
-        "R-5.3 Distal-M2M3": 49,
-        "L-5.3 Distal-M2M3": 50
+        "R-5.2 M1 early bifurcation": 47,
+        "L-5.2 M1 early bifurcation": 48,
+        "R-5.3 M1-M2 junction": 49,
+        "L-5.3 M1-M2 junction": 50,
+        "R-5.4 Distal-M2M3": 51,
+        "L-5.4 Distal-M2M3": 52
     }
 }
