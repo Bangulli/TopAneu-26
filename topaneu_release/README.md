@@ -12,12 +12,12 @@ In total, the TopAneu training dataset contains 417 scans from 409 unique patien
 
 The center IDs correspond to the following data sources:
 
-| Source                                      | Country / Type | Center ID | Modalities | Patients |
-|:--------------------------------------------|:---------------|:----------|:-----------|---------:|
-| Lausanne University Hospital (CHUV)         | Switzerland    | center-1  | MRA        |      200 |
-| Geneva University Hospitals (HUG)           | Switzerland    | center-2  | CTA, MRA   |       87 |
-| Mie Chuo Medical Center                     | Japan          | center-4  | CTA        |       54 |
-| Public datasets: INSTED and OpenNeuro       | Public data    | center-5  | MRA        |       68 |
+| Source                                      | Country / Type | Center ID (4) | Modalities(2) | # Patients (417)|
+|:--------------------------------------------|:---------------|:--------------|:--------------|----------------:|
+| Lausanne University Hospital (CHUV)         | Switzerland    | center-1      | MRA           |      200        |
+| Geneva University Hospitals (HUG)           | Switzerland    | center-2      | CTA, MRA      |       87        |
+| Mie Chuo Medical Center                     | Japan          | center-4      | CTA           |       54        |
+| Public datasets: INSTED and OpenNeuro       | Public data    | center-5      | MRA           |       68        |
 
 Data from center-3 (University Medical Center Utrecht, UMCU) are reserved for the test set and are not included in the released training data.
 
@@ -60,8 +60,8 @@ topaneu/
 └── README.md
 ```
 
-The filenames for the images and labels are named in the following schema: `topaneu_{centerID}_{modality}_{patientID}`.
-Center-4 data contains a few patients with longitudinal scans, and their filenames have an appended count number (unknown order).
+The filenames for the images and labels are named in the following schema: `topaneu_{centerID}_{modality}_{patientID}`.  
+Center-4 data contains seven patients with longitudinal scans, and the filenames include an appended count number that does not indicate chronological order.
 
 **Data folder description:**
 
@@ -149,15 +149,13 @@ The values for the vessel masks and aneurysm-type masks are documented in the `v
 
 ## Changelog
 
-More than 50 cases from the batch-1 release have been updated in the latest release. The changes include correction of annotations, improved defacing, and updates on new MCA locations. Please see `CHANGELOG.txt` for details.
+52 cases from the batch-1 release have been updated in the latest release. The changes include correction of annotations, improved defacing, and updates on new MCA locations. Please see `CHANGELOG.txt` for details.
 
 ## Data Usage Terms
 
 The data are provided under the following terms:
 
 **Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.**
-
-This means:
 
 You may use this dataset for non-commercial research purposes.
 You may use this dataset for commercial purposes only after receiving prior permission from the data owner.
