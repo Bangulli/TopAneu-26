@@ -1,5 +1,5 @@
 topaneu_center2_mr_002 — Changed L M1 trunk to L M1-M2 junction; MCA location mapping update
-topaneu_center2_mr_004 — Improved defacing; added missing aneurysm BA tip; changed R M1 trunk to R M1-M2 junction; MCA location mapping update
+topaneu_center2_mr_004 — Improved defacing; added missing aneurysm BA tip; changed R M1 trunk to R M1-M2 junction; MCA location mapping update; swapped R M1-M2 junction and BA tip
 topaneu_center2_mr_007 — Improved defacing; changed R M1-M2 junction to R M1 early bifurcation
 topaneu_center2_mr_010 — Improved defacing; corrected R ICA C6-nonOA mask
 topaneu_center2_mr_011 — Improved cropping
@@ -50,3 +50,11 @@ topaneu_center4_ct_105 — MCA location mapping update
 topaneu_center4_ct_107 — Changed L M1-M2 junction to L M1 early bifurcation
 topaneu_center4_ct_108 — Added missing aneurysm R ICA C7-Pcom-junction
 topaneu_center4_ct_122 — MCA location mapping update
+topaneu_center1_mr_150 — Discarded
+topaneu_center1_mr_024 — Changed L ICA infraclinoid C1-C5 to R ICA C6-OA-junction; Changed R ICA C6-OA-junction to L ICA C6-OA-junction; Changed L ICA C6-OA-junction to L ICA infraclinoid C1-C5
+topaneu_center1_mr_359 — Swapped Acom complex and L ICA C6-nonOA
+topaneu_center1_mr_401 — Swapped L ICA C6-nonOA and R ICA infraclinoid C1-C5
+topaneu_center1_mr_772 — Swapped R ICA C6-nonOA and L ICA infraclinoid C1-C5
+topaneu_center1_mr_795 — Swapped R ICA infraclinoid C1-C5 and L ICA C6-nonOA
+topaneu_center1_mr_702 — Corrected all masks + swapped L ICA C6-OA-junction and R ICA C6-nonOA
+topaneu_center5_mr_481 — Changed L ICA C7-terminus to R ICA C6-nonOA + changed R ICA C6-nonOA to L ICA C7-nonBranch

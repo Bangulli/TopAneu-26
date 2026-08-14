@@ -3321,46 +3321,6 @@
         "origins_match_vmask": true,
         "orientations_match_vmask": true
     },
-    "topaneu_center1_mr_150_0000.nii.gz": {
-        "is_LPS": true,
-        "shape": [
-            550,
-            707,
-            145
-        ],
-        "spacing": [
-            0.251116007566452,
-            0.251116007566452,
-            0.7000970244407654
-        ],
-        "origin": [
-            -67.84512329101562,
-            -81.28571319580078,
-            -58.86714172363281
-        ],
-        "orientation": "LPS",
-        "has_json": true,
-        "has_lmask": true,
-        "has_tmask": true,
-        "has_vmask": true,
-        "labels_match": true,
-        "lmask_is_uint8": true,
-        "shapes_match_lmask": true,
-        "spacings_match_lmask": true,
-        "origins_match_lmask": true,
-        "orientations_match_lmask": true,
-        "tmask_is_uint8": true,
-        "shapes_match_tmask": true,
-        "spacings_match_tmask": true,
-        "origins_match_tmask": true,
-        "orientations_match_tmask": true,
-        "N_components_match_tmask_lmask": true,
-        "vmask_is_uint8": true,
-        "shapes_match_vmask": true,
-        "spacings_match_vmask": true,
-        "origins_match_vmask": true,
-        "orientations_match_vmask": true
-    },
     "topaneu_center2_ct_138_0000.nii.gz": {
         "is_LPS": true,
         "shape": [
@@ -4481,6 +4441,46 @@
         "origins_match_vmask": true,
         "orientations_match_vmask": true
     },
+    "topaneu_center4_ct_020_2_0000.nii.gz": {
+        "is_LPS": true,
+        "shape": [
+            351,
+            399,
+            610
+        ],
+        "spacing": [
+            0.42899999022483826,
+            0.42899999022483826,
+            0.25
+        ],
+        "origin": [
+            -76.75200653076172,
+            -98.06510162353516,
+            -529.75
+        ],
+        "orientation": "LPS",
+        "has_json": true,
+        "has_lmask": true,
+        "has_tmask": true,
+        "has_vmask": true,
+        "labels_match": true,
+        "lmask_is_uint8": true,
+        "shapes_match_lmask": true,
+        "spacings_match_lmask": true,
+        "origins_match_lmask": true,
+        "orientations_match_lmask": true,
+        "tmask_is_uint8": true,
+        "shapes_match_tmask": true,
+        "spacings_match_tmask": true,
+        "origins_match_tmask": true,
+        "orientations_match_tmask": true,
+        "N_components_match_tmask_lmask": true,
+        "vmask_is_uint8": true,
+        "shapes_match_vmask": true,
+        "spacings_match_vmask": true,
+        "origins_match_vmask": true,
+        "orientations_match_vmask": true
+    },
     "topaneu_center2_ct_144_0000.nii.gz": {
         "is_LPS": true,
         "shape": [
@@ -5097,6 +5097,46 @@
             -78.75141143798828,
             -67.30845642089844,
             -51.84524917602539
+        ],
+        "orientation": "LPS",
+        "has_json": true,
+        "has_lmask": true,
+        "has_tmask": true,
+        "has_vmask": true,
+        "labels_match": true,
+        "lmask_is_uint8": true,
+        "shapes_match_lmask": true,
+        "spacings_match_lmask": true,
+        "origins_match_lmask": true,
+        "orientations_match_lmask": true,
+        "tmask_is_uint8": true,
+        "shapes_match_tmask": true,
+        "spacings_match_tmask": true,
+        "origins_match_tmask": true,
+        "orientations_match_tmask": true,
+        "N_components_match_tmask_lmask": true,
+        "vmask_is_uint8": true,
+        "shapes_match_vmask": true,
+        "spacings_match_vmask": true,
+        "origins_match_vmask": true,
+        "orientations_match_vmask": true
+    },
+    "topaneu_center4_ct_051_2_0000.nii.gz": {
+        "is_LPS": true,
+        "shape": [
+            306,
+            397,
+            296
+        ],
+        "spacing": [
+            0.4300000071525574,
+            0.4300000071525574,
+            0.29998779296875
+        ],
+        "origin": [
+            -73.82099914550781,
+            -93.94979095458984,
+            -562.5000610351562
         ],
         "orientation": "LPS",
         "has_json": true,
@@ -12081,6 +12121,46 @@
         "origins_match_vmask": true,
         "orientations_match_vmask": true
     },
+    "topaneu_center4_ct_025_1_0000.nii.gz": {
+        "is_LPS": true,
+        "shape": [
+            323,
+            372,
+            584
+        ],
+        "spacing": [
+            0.4300000071525574,
+            0.43000003695487976,
+            0.2500380873680115
+        ],
+        "origin": [
+            -66.12300109863281,
+            -87.8711166381836,
+            -576.5428466796875
+        ],
+        "orientation": "LPS",
+        "has_json": true,
+        "has_lmask": true,
+        "has_tmask": true,
+        "has_vmask": true,
+        "labels_match": true,
+        "lmask_is_uint8": true,
+        "shapes_match_lmask": true,
+        "spacings_match_lmask": true,
+        "origins_match_lmask": true,
+        "orientations_match_lmask": true,
+        "tmask_is_uint8": true,
+        "shapes_match_tmask": true,
+        "spacings_match_tmask": true,
+        "origins_match_tmask": true,
+        "orientations_match_tmask": true,
+        "N_components_match_tmask_lmask": true,
+        "vmask_is_uint8": true,
+        "shapes_match_vmask": true,
+        "spacings_match_vmask": true,
+        "origins_match_vmask": true,
+        "orientations_match_vmask": true
+    },
     "topaneu_center2_mr_048_0000.nii.gz": {
         "is_LPS": true,
         "shape": [
@@ -15601,6 +15681,46 @@
         "origins_match_vmask": true,
         "orientations_match_vmask": true
     },
+    "topaneu_center4_ct_034_2_0000.nii.gz": {
+        "is_LPS": true,
+        "shape": [
+            301,
+            371,
+            285
+        ],
+        "spacing": [
+            0.42899999022483826,
+            0.42899999022483826,
+            0.29998779296875
+        ],
+        "origin": [
+            -75.24300384521484,
+            -85.77210235595703,
+            -582.7001953125
+        ],
+        "orientation": "LPS",
+        "has_json": true,
+        "has_lmask": true,
+        "has_tmask": true,
+        "has_vmask": true,
+        "labels_match": true,
+        "lmask_is_uint8": true,
+        "shapes_match_lmask": true,
+        "spacings_match_lmask": true,
+        "origins_match_lmask": true,
+        "orientations_match_lmask": true,
+        "tmask_is_uint8": true,
+        "shapes_match_tmask": true,
+        "spacings_match_tmask": true,
+        "origins_match_tmask": true,
+        "orientations_match_tmask": true,
+        "N_components_match_tmask_lmask": true,
+        "vmask_is_uint8": true,
+        "shapes_match_vmask": true,
+        "spacings_match_vmask": true,
+        "origins_match_vmask": true,
+        "orientations_match_vmask": true
+    },
     "topaneu_center2_ct_160_0000.nii.gz": {
         "is_LPS": true,
         "shape": [
@@ -16497,166 +16617,6 @@
             -71.4833984375,
             -259.7763671875,
             1411.499755859375
-        ],
-        "orientation": "LPS",
-        "has_json": true,
-        "has_lmask": true,
-        "has_tmask": true,
-        "has_vmask": true,
-        "labels_match": true,
-        "lmask_is_uint8": true,
-        "shapes_match_lmask": true,
-        "spacings_match_lmask": true,
-        "origins_match_lmask": true,
-        "orientations_match_lmask": true,
-        "tmask_is_uint8": true,
-        "shapes_match_tmask": true,
-        "spacings_match_tmask": true,
-        "origins_match_tmask": true,
-        "orientations_match_tmask": true,
-        "N_components_match_tmask_lmask": true,
-        "vmask_is_uint8": true,
-        "shapes_match_vmask": true,
-        "spacings_match_vmask": true,
-        "origins_match_vmask": true,
-        "orientations_match_vmask": true
-    },
-    "topaneu_center4_ct_020_2_0000.nii.gz": {
-        "is_LPS": true,
-        "shape": [
-            351,
-            399,
-            610
-        ],
-        "spacing": [
-            0.42899999022483826,
-            0.42899999022483826,
-            0.25
-        ],
-        "origin": [
-            -76.75200653076172,
-            -98.06510162353516,
-            -529.75
-        ],
-        "orientation": "LPS",
-        "has_json": true,
-        "has_lmask": true,
-        "has_tmask": true,
-        "has_vmask": true,
-        "labels_match": true,
-        "lmask_is_uint8": true,
-        "shapes_match_lmask": true,
-        "spacings_match_lmask": true,
-        "origins_match_lmask": true,
-        "orientations_match_lmask": true,
-        "tmask_is_uint8": true,
-        "shapes_match_tmask": true,
-        "spacings_match_tmask": true,
-        "origins_match_tmask": true,
-        "orientations_match_tmask": true,
-        "N_components_match_tmask_lmask": true,
-        "vmask_is_uint8": true,
-        "shapes_match_vmask": true,
-        "spacings_match_vmask": true,
-        "origins_match_vmask": true,
-        "orientations_match_vmask": true
-    },
-    "topaneu_center4_ct_051_2_0000.nii.gz": {
-        "is_LPS": true,
-        "shape": [
-            306,
-            397,
-            296
-        ],
-        "spacing": [
-            0.4300000071525574,
-            0.4300000071525574,
-            0.29998779296875
-        ],
-        "origin": [
-            -73.82099914550781,
-            -93.94979095458984,
-            -562.5000610351562
-        ],
-        "orientation": "LPS",
-        "has_json": true,
-        "has_lmask": true,
-        "has_tmask": true,
-        "has_vmask": true,
-        "labels_match": true,
-        "lmask_is_uint8": true,
-        "shapes_match_lmask": true,
-        "spacings_match_lmask": true,
-        "origins_match_lmask": true,
-        "orientations_match_lmask": true,
-        "tmask_is_uint8": true,
-        "shapes_match_tmask": true,
-        "spacings_match_tmask": true,
-        "origins_match_tmask": true,
-        "orientations_match_tmask": true,
-        "N_components_match_tmask_lmask": true,
-        "vmask_is_uint8": true,
-        "shapes_match_vmask": true,
-        "spacings_match_vmask": true,
-        "origins_match_vmask": true,
-        "orientations_match_vmask": true
-    },
-    "topaneu_center4_ct_025_1_0000.nii.gz": {
-        "is_LPS": true,
-        "shape": [
-            323,
-            372,
-            584
-        ],
-        "spacing": [
-            0.4300000071525574,
-            0.43000003695487976,
-            0.2500380873680115
-        ],
-        "origin": [
-            -66.12300109863281,
-            -87.8711166381836,
-            -576.5428466796875
-        ],
-        "orientation": "LPS",
-        "has_json": true,
-        "has_lmask": true,
-        "has_tmask": true,
-        "has_vmask": true,
-        "labels_match": true,
-        "lmask_is_uint8": true,
-        "shapes_match_lmask": true,
-        "spacings_match_lmask": true,
-        "origins_match_lmask": true,
-        "orientations_match_lmask": true,
-        "tmask_is_uint8": true,
-        "shapes_match_tmask": true,
-        "spacings_match_tmask": true,
-        "origins_match_tmask": true,
-        "orientations_match_tmask": true,
-        "N_components_match_tmask_lmask": true,
-        "vmask_is_uint8": true,
-        "shapes_match_vmask": true,
-        "spacings_match_vmask": true,
-        "origins_match_vmask": true,
-        "orientations_match_vmask": true
-    },
-    "topaneu_center4_ct_034_2_0000.nii.gz": {
-        "is_LPS": true,
-        "shape": [
-            301,
-            371,
-            285
-        ],
-        "spacing": [
-            0.42899999022483826,
-            0.42899999022483826,
-            0.29998779296875
-        ],
-        "origin": [
-            -75.24300384521484,
-            -85.77210235595703,
-            -582.7001953125
         ],
         "orientation": "LPS",
         "has_json": true,

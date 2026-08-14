@@ -1,4 +1,4 @@
-import hashlib, os, json
+import hashlib, os, json, tqdm
 from pathlib import Path
 
 def make_checksums_for_dir(dir, block_size=65536):
@@ -16,7 +16,7 @@ def check_checksums(checksum_dir, image_dir, block_size=65563):
     checksum_dir = Path(checksum_dir)
     image_dir = Path(image_dir)
     
-    for f in [i for i in os.listdir(image_dir) if i.endswith(".nii.gz")]:
+    for f in tqdm.tqdm([i for i in os.listdir(image_dir) if i.endswith(".nii.gz")]):
         assert (checksum_dir/f.replace(".nii.gz", ".sha")).exists(), f"Couldnt find reference .sha for image {f}"
         sha256 = hashlib.sha256()
         with open(image_dir/f, 'rb') as file:
