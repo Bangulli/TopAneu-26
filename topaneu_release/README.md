@@ -1,23 +1,24 @@
-# TopAneu Training Data README
+# TopAneu Training Data
 
-Website: https://topaneu-26.grand-challenge.org/
+TopAneu training data is now available via SwitchDrive : [SWITCHdrive  data link](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
 
 The TopAneu data contains processed 3D angiographic brain scans and accompanying aneurysm annotations for multimodal vessel-specific intracranial aneurysm analysis.
 
 ## Data Release
 
-The TopAneu training data has been released in two batches. The first batch of training data was released on June 15th 2026, which contained 40 MRA cases from center-2 and 58 CTA cases from center-4. On July 31st 2026, the second batch was released, which added 200 MRA cases from center-1, 47 CTA cases from center-2, four longitudinal CTA cases from center-4, and 68 MRA cases from the public center-5.
+The TopAneu training data has been released in two batches. The first batch of training data was released on June 15th 2026, which contained 40 MRA cases from center-2 and 58 CTA cases from center-4. On July 31st 2026, the second batch was released, which added 199 MRA cases from center-1, 47 CTA cases from center-2, four longitudinal CTA cases from center-4, and 68 MRA cases from the public center-5.
 
-In total, the TopAneu training dataset contains 417 scans from 409 unique patients.
+In total, the TopAneu training dataset contains 416 scans from 408 unique patients.
 
 The center IDs correspond to the following data sources:
 
-| Source                                      | Country / Type | Center ID (4) | Modalities(2) | # Patients (417)|
-|:--------------------------------------------|:---------------|:--------------|:--------------|----------------:|
-| Lausanne University Hospital (CHUV)         | Switzerland    | center-1      | MRA           |      200        |
-| Geneva University Hospitals (HUG)           | Switzerland    | center-2      | CTA, MRA      |       87        |
-| Mie Chuo Medical Center                     | Japan          | center-4      | CTA           |       54        |
-| Public datasets: INSTED and OpenNeuro       | Public data    | center-5      | MRA           |       68        |
+
+| Source | Country / Type | Center ID (4) | Modalities (2) | # Patients (408) |
+| --- | --- | --- | --- | --- |
+| Lausanne University Hospital, CHUV | Switzerland | center-1 | MRA | 199 |
+| Geneva University Hospitals, HUG | Switzerland | center-2 | CTA, MRA | 87 |
+| Mie Chuo Medical Center, Mie-Chuo | Japan | center-4 | CTA | 54 |
+| Public datasets: INSTED and OpenNeuro | Public data | center-5 | MRA | 68 |
 
 Data from center-3 (University Medical Center Utrecht, UMCU) are reserved for the test set and are not included in the released training data.
 
@@ -149,7 +150,7 @@ The values for the vessel masks and aneurysm-type masks are documented in the `v
 
 ## Changelog
 
-52 cases from the batch-1 release have been updated in the latest release. The changes include correction of annotations, improved defacing, and updates on new MCA locations. Please see `CHANGELOG.txt` for details.
+52 cases from the batch-1 release have now been updated in the latest version. The changes include correction of annotations, improved defacing, and updates on new MCA locations. Please see `CHANGELOG.txt` for details.
 
 ## Data Usage Terms
 
@@ -166,21 +167,21 @@ By downloading the data, you agree with the terms of use.
 
 If you have questions or remarks, please contact the organizers:
 
-Ruisheng Su
-Eindhoven University of Technology
+Ruisheng Su  
+Eindhoven University of Technology  
 r.su@tue.nl
 
-Ekaterina Golubeva
-Zürcher Hochschule für Angewandte Wissenshaften
+Ekaterina Golubeva  
+Zürcher Hochschule für Angewandte Wissenshaften  
 golu@zhaw.ch
 
-Kaiyuan Yang
-University of Zürich
+Kaiyuan Yang  
+University of Zürich  
 kaiyuan.yang@uzh.ch
 
-Lorenz Kuhn
-Eindhoven University of Technology
+Lorenz Kuhn  
+Eindhoven University of Technology  
 l.a.kuhn@tue.nl
 
 Last updated:
-July 31st 2026
+August 14th 2026
