@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 import SimpleITK as sitk
 
-def infer_ct(img: sitk.Image) -> np.ndarray:
+def infer_ct(img: sitk.Image) -> sitk.Image:
     """Runs inference on CTA images
 
     Args:
@@ -34,7 +34,7 @@ def infer_ct(img: sitk.Image) -> np.ndarray:
     # For now, let us make bogus predictions
     return res
 
-def infer_mr(img: sitk.Image) -> np.ndarray:
+def infer_mr(img: sitk.Image) -> sitk.Image:
     """Runs inference on MRA images
 
     Args:

@@ -35,7 +35,7 @@ def infer_ct(img: sitk.Image) -> list:
     return preds
 
 def infer_mr(img: sitk.Image) -> list:
-    """Predicts aneurysm locations in CTA images.
+    """Predicts aneurysm locations in MRA images.
 
     Args:
         img (sitk.Image): The image to predict.

@@ -10,13 +10,9 @@ This repository contains templates to help you set up your submissions for the
 It contains the following:
 * ️🦾 A template for _task 1_ to base your submissions on
 * ️🦾 A template for _task 2_ to base your submissions on
-* ️📊 A baseline for _task 1_ **WIP**
-* ️📊 A baseline for _task 2_ **WIP**
 * 🧮 The _evaluation methods_ used to evaluate your submissions and to generate performance
   metrics for ranking 
 * 💾 The _dataset_ for the training is provided as sha256 hashes together with a convenient download script.
-
-Please note that this is a supplementary pack to the [Grand Challenge documentation](https://grand-challenge.org/documentation/).
 
 ## Templates
 
@@ -47,19 +43,15 @@ bash [do_build/do_save/do_test_run].sh
 ### Expected container outputs
 
 #### Task1
-A json file containing the detected locations of the sample, formatted as below. **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets.
-```json
-[ 
-	34,
-	35
-]
-```
+A json file containing the detected locations of the sample, formatted seen in the [Schema](Task1_output_json_schema.json). **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets. 
+**NOTE** The order of the values does not matter, though for human readability ascending order is recommended.
+
 #### Task2
 A 3D mask containing the (multi-)instance segmentations as provided in the `location_masks` in the training data, must fit the sample image dimensions!
 
 ## Data
 The data is hosted on [SWITCHDrive](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
-The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_deployment](topaneu_deployment/)
+The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_release](topaneu_release/)
 You can download the data and check the integrity using this short [script](utils/download.py) that will download the dataset to *TopAneu-26/* in the repository directory:
 ```bash
 python utils/download.py
@@ -72,14 +64,14 @@ Find more details of the methodology in the READMEs of the respective folder.
 
 The TL;DR is: 
 - Task one: Multiclass image location classification
-  - Expected outputs: Json files containing the predicted locations. (see [Schema](json_schema.json))
+  - Expected outputs: Json files containing the predicted locations. (see [Schema](Task1_output_json_schema.json))
   - Predicted labels (Pred) are compared to the ground truth (GT) and per-class metrics are computed for every sample and class: TP = label present in GT and Pred, FP = present in Pred not in GT, FN = Present in GT but not in Pred, TN = N labels in GT - (TP+FN).
   - The TP, FP, TN, FN are accumulated over the whole testset and Precision, Recall and MCC are computed per class.
   - For the ranking the Precision, Recall and MCC values are averaged across classes.
-- Task two: Instance Segmentation
-  - Expected outputs: 3D (multi-)instance location segmentation masks.
+- Task two: Image Segmentation
+  - Expected outputs: 3D segmentation masks with location labels.
   - The GT and predicted masks are binarized for each class, a TP = IoU > 0, FN = Present in GT but not in Pred and not TP, an FP = present in Pred not in GT and not TP, TN = N labels in GT - (TP+FN).
-  - Segmentation is evaluated globally for the entire volume, **not on an instance level**. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
+  - Segmentation is evaluated globally for the entire volume. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
 
 ### Run Locally
 Similar to the [Templates](#templates) bash scripts are provided to run the evaluation containers locally as they would be run on GC. If you want to run the evaluation locally you can prepare the data by placing the GT files in `./eval/task[1/2]/ground_truth/[location_jsons/location_masks]` and the predicted files in subdirectories in `./eval/task[1/2]/test/input/`. Notably the input subdiretories need to fit to the convention of the specific task and contain a `predictions.json` file to match the random UIDs to the GT data. For Task 1: `./eval/task1/test/input/[UID]/output/predicted-aneurysm-locations.json`; For Task 2: `./eval/task2/test/input/[UID]/output/images/aneurysm-segmentation/[UID].mha`. The `predictions.json` must map the UID to the actual filename of the sample image used to predict the output and is a list of prediction entries. Take a look at the `get_predictions_entry` function in the test scripts ([task1](eval/task1/test_evaluations/test.py), [task2](eval/task2/test_evaluations/test.py)) used to check the robustness of the methods.
@@ -100,13 +92,14 @@ Develop your method and integrate it into the templates.
 After successfully running the local test script, save the algorithm image: using the save script. On the platform: [create an algorithm](https://grand-challenge.org/documentation/create-an-algorithm-page/#creating-an-algorithm-for-a-challenge) and upload the algorithm image.
 
 ### Step 4: Submit the Example Algorithm
-[Submit your algorithm image](https://grand-challenge.org/documentation/automated-evaluation/) to the challenge.
+[Submit your algorithm image](https://topaneu-26.grand-challenge.org/evaluation/preliminary-docker-evaluation-sanity-check/submissions/create/) to the challenge.
 
 By following the steps above you will gain a solid understanding of the submission and evaluation process. This approach makes it much easier to identify and resolve any issues if something goes wrong later.
 
 ## Miscellaneous
 
 You can find which ressources are available for your container at runtime [here](https://grand-challenge.org/documentation/runtime-environment/)
+If you have further questions about how to set up your container, or if you do not want to follow this template you can find more information [here](https://grand-challenge.org/documentation/algorithms/).
 
 ---
 Generated by [Grand Challenge](https://grand-challenge.org/), modified by the TopAneu team. (2f10252)
