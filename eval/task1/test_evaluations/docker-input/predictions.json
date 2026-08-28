@@ -1,0 +1,90 @@
+[
+  {
+    "pk": "pk_for_file1_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file1_cls_1-42-52_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-ct-angiography",
+          "relative_path": "images/head-ct-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "socket": {
+          "slug": "detected-aneurysm-locations",
+          "relative_path": "detected-aneurysm-locations.json"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file2_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file2_cls_7_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-mr-angiography",
+          "relative_path": "images/head-mr-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "socket": {
+          "slug": "detected-aneurysm-locations",
+          "relative_path": "detected-aneurysm-locations.json"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file3_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file3_cls_1-7-52_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-mr-angiography",
+          "relative_path": "images/head-mr-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "socket": {
+          "slug": "detected-aneurysm-locations",
+          "relative_path": "detected-aneurysm-locations.json"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file4_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file4_cls_empty_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-ct-angiography",
+          "relative_path": "images/head-ct-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "socket": {
+          "slug": "detected-aneurysm-locations",
+          "relative_path": "detected-aneurysm-locations.json"
+        }
+      }
+    ]
+  }
+]

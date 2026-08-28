@@ -169,7 +169,7 @@ evaluation_method/
 # Ignore any actual images
 *.nii.gz
 *.mha
-*input/
+*/input/
 TopAneu-26/
 *instance level/
 *dummy.txt
