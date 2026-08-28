@@ -8,8 +8,15 @@ DOCKER_IMAGE_TAG="topaneu-26-task1-evaluation"
 
 DOCKER_NOOP_VOLUME="${DOCKER_IMAGE_TAG}-volume"
 
-INPUT_DIR="${SCRIPT_DIR}/test/input"
-OUTPUT_DIR="${SCRIPT_DIR}/test/output"
+INPUT_DIR="${SCRIPT_DIR}/test_evaluations/docker-input"
+OUTPUT_DIR="${SCRIPT_DIR}/test_evaluations/docker-output"
+mkdir -pv "$INPUT_DIR"
+# temp ground-truth dir for docker test by copying the contents
+# of test_evaluations/ground-truth to GT_DIR with a location_jsons subdir
+# (for load_gt() from evaluate.py to work inside docker env)
+GT_DIR="${SCRIPT_DIR}/test_evaluations/docker-ground-truth"
+mkdir -pv "$GT_DIR/location_jsons"
+cp -avr "${SCRIPT_DIR}/test_evaluations/ground-truth/"* "$GT_DIR/location_jsons/"
 
 echo "=+= (Re)build the container"
 source "${SCRIPT_DIR}/do_build.sh"
@@ -31,7 +38,7 @@ cleanup() {
 }
 
 # This allows for the Docker user to read
-chmod -R -f o+rX "$INPUT_DIR" "${SCRIPT_DIR}/ground_truth"
+chmod -R -f o+rX "$INPUT_DIR" "$GT_DIR"
 
 if [ -d "$OUTPUT_DIR" ]; then
   # This allows for the Docker user to write
@@ -70,9 +77,28 @@ docker run --rm \
     --volume "$INPUT_DIR":/input:ro \
     --volume "$OUTPUT_DIR":/output \
     --volume "$DOCKER_NOOP_VOLUME":/tmp \
-    --volume "${SCRIPT_DIR}/ground_truth":/opt/ml/input/data/ground_truth:ro \
+    --volume "$GT_DIR":/opt/ml/input/data/ground_truth:ro \
     $DOCKER_IMAGE_TAG
 
 echo "=+= Wrote results to ${OUTPUT_DIR}"
 
+echo "=+= Verifying metrics.json against expected output"
+EXPECTED_METRICS="${SCRIPT_DIR}/test_evaluations/output/expected_metrics.json"
+ACTUAL_METRICS="${OUTPUT_DIR}/metrics.json"
+
+python3 "${SCRIPT_DIR}/compare_docker_metrics.py" "$ACTUAL_METRICS" "$EXPECTED_METRICS"
+
 echo "=+= Save this image for uploading via ./do_save.sh"
+
+echo "=+= Cleaning up temp dirs"
+# Use the container itself to remove /output contents, to avoid
+# host-side permission errors on files written by the container
+docker run --rm \
+    --platform=linux/amd64 \
+    --quiet \
+    --volume "$OUTPUT_DIR":/output \
+    --entrypoint /bin/sh \
+    $DOCKER_IMAGE_TAG \
+    -c "rm -rf /output/* || true"
+
+rm -rv "$GT_DIR"
