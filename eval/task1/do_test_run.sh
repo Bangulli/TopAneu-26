@@ -10,7 +10,6 @@ DOCKER_NOOP_VOLUME="${DOCKER_IMAGE_TAG}-volume"
 
 INPUT_DIR="${SCRIPT_DIR}/test_evaluations/docker-input"
 OUTPUT_DIR="${SCRIPT_DIR}/test_evaluations/docker-output"
-mkdir -pv "$INPUT_DIR"
 # temp ground-truth dir for docker test by copying the contents
 # of test_evaluations/ground-truth to GT_DIR with a location_jsons subdir
 # (for load_gt() from evaluate.py to work inside docker env)

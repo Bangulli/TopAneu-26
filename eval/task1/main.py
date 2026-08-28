@@ -216,7 +216,7 @@ def process_interf_mr(
     report += pformat(job)
     report += "\n"
 
-    # Firstly, find the location of the results
+    # Firstly, find the path of the results
 
     path_detected_aneurysm_locations = get_pred_file_path(
         job_pk=job["pk"],
