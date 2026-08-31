@@ -1,10 +1,11 @@
-# TopAneu-26 Task 1 evaluation methodology
+# TopAneu-26 Task 1 Evaluation
 
-Task 1 is a multi-label multi-class image classification task. Expected outputs are json files with the detected aneurysm location classes. Evaluation metrics are **Precision**, **Recall** and **Matthews Correlation Coefficient (MCC)** and computed for each class. Submissions are ranked by the average of these metrics across all classes.
+Task 1 is a multi-label multi-class image classification task. Expected outputs are json files with the detected aneurysm location classes. Evaluation metrics are **Precision**, **Recall**, and **Matthews Correlation Coefficient (MCC)** for each class. Submissions are ranked by the average of these metrics across all classes, ignoring NaN values.
 
 ## Method
 
-At evaluation time all TP, FP, FN and TN are accumulated for each individual class over every prediction.
+Detection counts (TP, TN, FP, FN) are summed across images for each location class.
+Then, precision, recall, and MCC are computed from the aggregated counts for each class (division-by-zero returns NaN).
 
 **Example**:
 
@@ -39,13 +40,13 @@ Undefined division-by-zero results are excluded from the macro-averages.
 
 ## Ranking
 
-Submissions are ranked by first computing the average of these metrics across all classes and then by the average rank of the resulting global Precision, Recall and MCC.
+For each metric, values are first averaged across images for each class. The resulting per-class averages are then averaged across all classes. Submissions are then ranked according to the average rank across these class-averaged metrics.
 
 ## Usage
 
 ### Folders `ground-truth/` and `predictions/`
 
-When not in docker environment, you can put the predictions and ground-truth files into two sub-folders
+When not in docker environment, you can put the prediction and ground-truth files in two subdirectories
 `predictions/` and `ground-truth/` in the current directory and call `main.py` to get the evaluation results:
 
 ```sh
@@ -55,18 +56,27 @@ When not in docker environment, you can put the predictions and ground-truth fil
 ├── main.py
 ```
 
-_You can also specify your own custom paths for the ground-truth, predictions folders with the `--base_path` flag:_
+_You can also point to any folder containing `ground-truth` and `predictions` subdirectories with the `--base_path` flag:_
 
 ```sh
-python3 main.py
+# create a virtual env
+python3.10 -m venv .venv
+# activate
+source .venv/bin/activate
+# and install the dependencies (including topbrain25_eval)
+pip install -r requirements.txt
 
 # Outside of Docker, by default, main.py looks for files to evaluate in the current directory:
 # in ./predictions/ and ./ground-truth/
-# You can override this with any folder containing those sub-folders
-python3 main.py --base_path <path to dir with the two sub-dirs>
+python3 main.py
+
+# You can override this with any folder containing the gt and pred sub-folders
+python3 main.py --base_path <parent_dir_of_gt_pred_subdirs>
 ```
 
-**The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same way.**
+**The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same order.**
+
+The evaluation results are saved as a JSON file at **`<parent_dir_of_gt_pred_subdirs>/output/metrics.json`**.
 
 ### Docker for GC
 

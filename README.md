@@ -8,11 +8,9 @@ This repository contains templates to help you set up your submissions for the
 [TopAneu-26 challenge](https://topaneu-26.grand-challenge.org/).
 
 It contains the following:
-* ️🦾 A template for _task 1_ to base your submissions on
-* ️🦾 A template for _task 2_ to base your submissions on
-* 🧮 The _evaluation methods_ used to evaluate your submissions and to generate performance
-  metrics for ranking 
-* 💾 The _dataset_ for the training is provided as sha256 hashes together with a convenient download script.
+* ️🦾 A template for _Task 1_ to base your submission on
+* ️🦾 A template for _Task 2_ to base your submission on
+* 🧮 The _evaluation methods_ used to evaluate your submissions and generate performance metrics for ranking
 
 ## Templates
 
@@ -42,50 +40,42 @@ bash [do_build/do_save/do_test_run].sh
 
 ### Expected container outputs
 
-#### Task1: Multiclass aneurysm location classification
+#### Task 1: Multiclass aneurysm location classification
 
-A json file containing the detected locations of the sample, formatted seen in the [Schema](Task1_output_json_schema.json).
+A json file containing the detected locations of the sample, formatted seen in the [schema](Task1_output_json_schema.json).
   * **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets. 
   * **NOTE** The order of the values does not matter, though for human readability ascending order is recommended.
 
-#### Task2 Multiclass aneurysm segmentation
+#### Task 2: Multiclass aneurysm segmentation
 
 A 3D mask containing the multi-class aneurysm segmentations as provided in the `location_masks` in the training data.
 
-## Data
+## Evaluation
 
-The data is hosted on [SWITCHDrive](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
-The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_release](topaneu_release/)
-You can download the data and check the integrity using this short [script](utils/download.py) that will download the dataset to *TopAneu-26/* in the repository directory:
-```bash
-python utils/download.py
-```
-**NOTE** It requires an environment with the `requests` and `tqdm` libraries installed.
+The evaluation methods, together with testing and documentation, are provided for each task in the [eval/](eval/) folder.
+For more details on the methodology, see the README in the respective task folder.
 
-## Evaluation Methods
-
-The evaluation methods together with test cases are provided for each task in [eval](eval/)
-Find more details of the methodology in the READMEs of the respective folder.
-
-- [Task1 README](eval/task1/README.md):
-  - Predicted labels (Pred) are compared to the ground truth (GT) and per-class metrics are computed for every sample and class.
-  - The TP, FP, TN, FN are accumulated over the whole testset and Precision, Recall and MCC are computed per class.
-  - For the ranking the Precision, Recall and MCC values are averaged across classes.
-- [Task2 README](eval/task2/README.md):
-  - The GT and predicted masks are binarized for each class, with detection determined based on overlap-threshold (non-zero overlap).
-  - Segmentation is evaluated globally for the entire volume. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value for HD95.
+- [Task 1 Evaluation README](eval/task1/README.md)
+- [Task 2 Evaluation README](eval/task2/README.md)
 
 ### Evaluate Locally
 
-For local evaluation, you can put the predictions and ground-truth files into two sub-folders
-`predictions/` and `ground-truth/` in any directory and call `main.py` using `--base_path` flag to get the evaluation results:
+For local evaluation, you can put the prediction and ground-truth files in two subdirectories
+`predictions/` and `ground-truth/`, **under the same parent directory**.
+Then, run `main.py` with the `--base_path` flag to get the evaluation results:
 
 ```sh
-# from eval/task1or2
-python3 main.py --base_path <path to dir containing the two sub-dirs>
+# from eval/task1 or eval/task2
+python3 main.py --base_path <parent_dir_of_gt_pred_subdirs>
+
+# example usage
+cd eval/task1 # or cd eval/task2
+python3 main.py --base_path ./test_evaluations/
 ```
 
-Note: The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same way.
+Note: The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same order.
+
+The evaluation results are saved as a JSON file at **`<parent_dir_of_gt_pred_subdirs>/output/metrics.json`**.
 
 ## Now What?
 
