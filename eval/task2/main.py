@@ -5,9 +5,9 @@ You can run the evaluation locally outside of Docker environment.
 Outside of Docker, by default, main.py looks for files to evaluate in the current directory:
 in ./predictions/ and ./ground-truth/
 You can override this with any folder containing `ground-truth/` and `predictions/` sub-folders.
-The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same way.
+The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same order.
 
-python3 main.py --base_path <path to dir with the two sub-dirs>
+python3 main.py --base_path <parent_dir_of_gt_pred_subdirs>
 
 When run within a container. Its steps are as follows:
 
