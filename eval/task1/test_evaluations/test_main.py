@@ -209,7 +209,7 @@ def test_main_e2e_averages(saved_metrics):
                 1,
             ]
         ),
-        # 4 non-nan PRECISION values
+        # 4 non-nan RECALL values
         "RECALL": np.mean(
             [
                 1 / 2,

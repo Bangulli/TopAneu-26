@@ -48,6 +48,11 @@ def test_load_gt():
 
     assert gt_locs == [1, 42, 52]
 
+    fn = base_dir / "ground-truth/file4_cls_empty_gt.json"
+    gt_locs = load_gt(fn, execute_in_docker=False)
+
+    assert gt_locs == []
+
 
 ##################################################################
 #### tests for evaluation_function()

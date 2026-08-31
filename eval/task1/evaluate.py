@@ -7,7 +7,7 @@ import numpy as np
 N_CLASSES = 52
 
 
-def load_gt(fn, execute_in_docker=True) -> list[int]:
+def load_gt(fn: Path, execute_in_docker: bool = True) -> list[int]:
     """
     compatible with both json of a naked list or nested json with `locations` key
 
@@ -16,19 +16,25 @@ def load_gt(fn, execute_in_docker=True) -> list[int]:
     or:
       {"locations": [1, 2, 3]}
 
+    When running in Docker, the input filename is resolved relative to
+    /opt/ml/input/data/ground_truth/location_jsons and nifti/mha image
+    extensions are converted to .json.
+
     Returns the aneu locations list.
     """
-    fn = str(fn)
-
     print(f"fn = {fn}")
 
     if execute_in_docker:
-        dir = Path("/opt/ml/input/data/ground_truth/location_jsons")
-        if ".nii.gz" in fn:
-            fn = fn.replace("_0000.", ".").replace(".nii.gz", ".json")
-        elif ".mha" in fn:
-            fn = fn.replace("_0000.", ".").replace(".mha", ".json")
-        gt_path = dir / fn
+        gt_dir = Path("/opt/ml/input/data/ground_truth/location_jsons")
+        if fn.name.endswith(".nii.gz"):
+            fn = fn.with_name(
+                fn.name.replace("_0000.", ".").replace(".nii.gz", ".json")
+            )
+        elif fn.name.endswith(".mha"):
+            fn = fn.with_name(fn.name.replace("_0000.", ".").replace(".mha", ".json"))
+        else:
+            raise ValueError(f"Unsupported extension for {fn}")
+        gt_path = gt_dir / fn
     else:
         gt_path = fn
 
@@ -54,8 +60,9 @@ def evaluation_function(pred_locs, gt_path, execute_in_docker=True):
     # print(f"gt_locs = {gt_locs}")
     # print(f"pred_locs = {pred_locs}")
 
-    result = {}
-    result["gt_filename"] = str(gt_path.name)
+    result = {
+        "gt_filename": gt_path.name,
+    }
 
     for cls in range(1, N_CLASSES + 1):
         result[f"TP_{cls}"] = int(cls in pred_locs and cls in gt_locs)
@@ -71,7 +78,7 @@ def evaluation_aggregation(results: list):
     """for division-by-zero, return NaN"""
     aggregates = {}
     keys = results[0].keys()
-    ## aggregate all tpfpfn
+    ## aggregate all metrics
     for k in keys:
         if k != "gt_filename":
             aggregates[k] = sum([result[k] for result in results])

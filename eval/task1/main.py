@@ -42,6 +42,8 @@ from helpers import is_docker, run_prediction_processing, setup_logger, tree
 
 logger = logging.getLogger("evaluate")
 
+# supported extensions for evaluation
+EXTENSIONS = ("*.json",)
 
 EXEC_IN_DOCKER = is_docker()
 
@@ -97,12 +99,14 @@ def main():
 
             print(f"pred_path = {pred_path}")
 
-            result_detected_aneurysm_locations = load_json_file(
+            detected_aneurysm_locations = load_json_file(
                 path=pred_path,
             )
 
             result = evaluation_function(
-                result_detected_aneurysm_locations, gt_path, EXEC_IN_DOCKER
+                detected_aneurysm_locations,
+                gt_path,
+                execute_in_docker=False,
             )
             metrics["results"].append(result)
 
@@ -192,7 +196,7 @@ def process_interf_ct(
 
     # Secondly, read the results
 
-    result_detected_aneurysm_locations = load_json_file(
+    detected_aneurysm_locations = load_json_file(
         path=path_detected_aneurysm_locations,
     )
 
@@ -204,7 +208,8 @@ def process_interf_ct(
     )
 
     return evaluation_function(
-        result_detected_aneurysm_locations, image_name_head_ct_angiography
+        detected_aneurysm_locations,
+        image_name_head_ct_angiography,
     )
 
 
@@ -226,7 +231,7 @@ def process_interf_mr(
 
     # Secondly, read the results
 
-    result_detected_aneurysm_locations = load_json_file(
+    detected_aneurysm_locations = load_json_file(
         path=path_detected_aneurysm_locations,
     )
 
@@ -238,7 +243,8 @@ def process_interf_mr(
     )
 
     return evaluation_function(
-        result_detected_aneurysm_locations, image_name_head_mr_angiography
+        detected_aneurysm_locations,
+        image_name_head_mr_angiography,
     )
 
 
@@ -360,9 +366,5 @@ if __name__ == "__main__":
     OUTPUT_DIRECTORY = BASE_PATH / "output"
 
     OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
-
-    # supported extensions
-    # ground truth rglob for *.json, prediction rglob for *.json
-    EXTENSIONS = ("*.json",)
 
     raise SystemExit(main())
