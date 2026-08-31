@@ -1,11 +1,12 @@
-FROM --platform=linux/amd64 docker.io/library/python:3.14-slim AS example-evaluation-amd64
+FROM --platform=linux/amd64 docker.io/library/python:3.10-slim AS example-evaluation-amd64
 
 # Ensures that Python output to stdout/stderr is not buffered: prevents missing information when terminating
 ENV PYTHONUNBUFFERED=1
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y git
+
 RUN groupadd -r user && useradd -m --no-log-init -r -g user user
-
-
 
 USER user
 
