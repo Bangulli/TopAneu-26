@@ -1,7 +1,15 @@
 """
 The following is a simple example evaluation method.
 
-It is meant to run within a container. Its steps are as follows:
+You can run the evaluation locally outside of Docker environment.
+Outside of Docker, by default, main.py looks for files to evaluate in the current directory:
+in ./predictions/ and ./ground-truth/
+You can override this with any folder containing `ground-truth/` and `predictions/` sub-folders.
+The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same way.
+
+python3 main.py --base_path <path to dir with the two sub-dirs>
+
+When run within a container. Its steps are as follows:
 
   1. Read the algorithm output
   2. Associate original algorithm inputs with a ground truths via predictions.json
@@ -10,14 +18,10 @@ It is meant to run within a container. Its steps are as follows:
   5. Aggregate the calculated metrics
   6. Save the metrics to metrics.json
 
-To run it locally, you can call the following bash script:
-
+(for organizers) Test for Docker environment
   ./do_test_run.sh
 
-This will start the evaluation and reads from ./test/input and writes to ./test/output
-
-To save the container and prep it for upload to Grand-Challenge.org you can call:
-
+(for organizers) To save the container and prep it for upload to Grand-Challenge.org you can call:
   ./do_save.sh
 
 Any container that shows the same behaviour will do, this is purely an example of how one COULD do it.
@@ -28,36 +32,82 @@ https://grand-challenge.org/documentation/runtime-environment/
 Happy programming!
 """
 
-import glob
 import json
 import logging
-import random
 from pathlib import Path
 from pprint import pformat
-from statistics import mean
 
-import SimpleITK
-from helpers import run_prediction_processing, setup_logger, tree
-
-from evaluate import evaluation_function, evaluation_aggregation, evaluation_average
+import SimpleITK as sitk
+from evaluate import evaluation_aggregation, evaluation_average, evaluation_function
+from helpers import is_docker, run_prediction_processing, setup_logger, tree
 
 logger = logging.getLogger("evaluate")
 
+# supported extensions for evaluation
+EXTENSIONS = ("*.nii.gz", "*.nii", "*.mha")
 
-INPUT_DIRECTORY = Path("/input")
-OUTPUT_DIRECTORY = Path("/output")
+EXEC_IN_DOCKER = is_docker()
+
+if EXEC_IN_DOCKER:
+    # input dir with the predictions.json file for Docker env
+    # need to define here before the process interface functions
+    INPUT_DIRECTORY = Path("/input")
 
 
 def main():
-    setup_logger(
-        # Optionally: change this to the more verbose DEBUG
-        level=logging.INFO,
-    )
-
-    log_inputs()
-
     metrics = {}
-    predictions = read_predictions()
+
+    if EXEC_IN_DOCKER:
+        setup_logger(
+            # Optionally: change this to the more verbose DEBUG
+            level=logging.INFO,
+        )
+
+        log_inputs()
+
+        # fetch the predictions through predictions.json
+        predictions = read_predictions()
+
+        # Use concurrent workers to process the predictions more efficiently
+        metrics["results"] = run_prediction_processing(
+            fn=process, predictions=predictions
+        )
+    else:
+        # When not in docker environment, put gt and pred in these folders
+        # Make sure the gt/pred appear in the same sorted order
+        pred_dir = BASE_PATH / "predictions"
+        gt_dir = BASE_PATH / "ground-truth"
+
+        predictions = rglob_files(pred_dir, EXTENSIONS)
+        gts = rglob_files(gt_dir, EXTENSIONS)
+
+        print(f"predictions = {predictions}")
+        print(f"gts = {gts}")
+
+        assert len(predictions) > 0, "no prediction files"
+        assert len(gts) > 0, "no ground truth"
+
+        # early abort if num pred != gt files
+        assert len(gts) == len(predictions), "unequal gt & pred"
+
+        metrics["results"] = []
+
+        for i, gt_path in enumerate(gts):
+            print(f"i = {i}")
+            print(f"gt_path = {gt_path}")
+
+            pred_path = predictions[i]
+
+            print(f"pred_path = {pred_path}")
+
+            aneurysm_segmentation = sitk.ReadImage(pred_path)
+
+            result = evaluation_function(
+                aneurysm_segmentation,
+                gt_path,
+                execute_in_docker=False,
+            )
+            metrics["results"].append(result)
 
     # We now process each algorithm job for this submission
     # Note that the jobs are not in any specific order!
@@ -96,12 +146,16 @@ def main():
     #
     # One, both or neither will be set.
 
-    # Use concurrent workers to process the predictions more efficiently
-    metrics["results"] = run_prediction_processing(fn=process, predictions=predictions)
-
+    # We have the results per prediction, we can aggregate the results and
+    # generate an overall score(s) for this submission
     if metrics["results"]:
-        metrics["aggregates_per_locations"] = evaluation_aggregation(metrics["results"])
-        metrics["aggregates_avg"] = evaluation_average(metrics["aggregates_per_locations"])
+        metrics["aggregates_per_location"] = evaluation_aggregation(metrics["results"])
+        metrics["aggregates_avg"] = evaluation_average(
+            metrics["aggregates_per_location"]
+        )
+
+        # document the number of test images
+        metrics["n_cases"] = len(metrics["results"])
 
     # Make sure to save the metrics
     write_metrics(metrics=metrics)
@@ -115,15 +169,15 @@ def process(job):
 
     # Lookup the handler for this particular set of sockets (i.e. the interface)
     handler = {
-        ("head-ct-angiography",): process_interf0,
-        ("head-mr-angiography",): process_interf1,
+        ("head-ct-angiography",): process_interf_ct,
+        ("head-mr-angiography",): process_interf_mr,
     }[interface_key]
 
     # Call the handler
     return handler(job)
 
 
-def process_interf0(
+def process_interf_ct(
     job,
 ):
     """Processes a single algorithm job, looking at the outputs"""
@@ -131,9 +185,9 @@ def process_interf0(
     report += pformat(job)
     report += "\n"
 
-    # Firstly, find the location of the results
+    # Firstly, find the path of the results
 
-    location_aneurysm_segmentation = get_file_location(
+    gc_pred_dir = get_pred_file_path(
         job_pk=job["pk"],
         values=job["outputs"],
         slug="aneurysm-segmentation",
@@ -141,8 +195,8 @@ def process_interf0(
 
     # Secondly, read the results
 
-    result_aneurysm_segmentation = load_image_file_as_array(
-        location=location_aneurysm_segmentation,
+    aneurysm_segmentation = load_from_gc_dir(
+        gc_pred_dir=gc_pred_dir,
     )
 
     # Thirdly, retrieve the input file name to match it with your ground truth
@@ -152,10 +206,13 @@ def process_interf0(
         slug="head-ct-angiography",
     )
 
-    return evaluation_function(result_aneurysm_segmentation, image_name_head_ct_angiography)
+    return evaluation_function(
+        aneurysm_segmentation,
+        image_name_head_ct_angiography,
+    )
 
 
-def process_interf1(
+def process_interf_mr(
     job,
 ):
     """Processes a single algorithm job, looking at the outputs"""
@@ -163,9 +220,9 @@ def process_interf1(
     report += pformat(job)
     report += "\n"
 
-    # Firstly, find the location of the results
+    # Firstly, find the path of the results
 
-    location_aneurysm_segmentation = get_file_location(
+    gc_pred_dir = get_pred_file_path(
         job_pk=job["pk"],
         values=job["outputs"],
         slug="aneurysm-segmentation",
@@ -173,8 +230,8 @@ def process_interf1(
 
     # Secondly, read the results
 
-    result_aneurysm_segmentation = load_image_file_as_array(
-        location=location_aneurysm_segmentation,
+    aneurysm_segmentation = load_from_gc_dir(
+        gc_pred_dir=gc_pred_dir,
     )
 
     # Thirdly, retrieve the input file name to match it with your ground truth
@@ -184,7 +241,10 @@ def process_interf1(
         slug="head-mr-angiography",
     )
 
-    return evaluation_function(result_aneurysm_segmentation, image_name_head_mr_angiography)
+    return evaluation_function(
+        aneurysm_segmentation,
+        image_name_head_mr_angiography,
+    )
 
 
 def log_inputs():
@@ -196,7 +256,8 @@ def log_inputs():
 
 def read_predictions():
     # The prediction file tells us the location of the users' predictions
-    return load_json_file(location=INPUT_DIRECTORY / "predictions.json")
+    with open(INPUT_DIRECTORY / "predictions.json") as f:
+        return json.loads(f.read())
 
 
 def get_interface_key(job):
@@ -223,30 +284,22 @@ def get_interface_relative_path(*, values, slug):
     raise RuntimeError(f"Value with interface {slug} not found!")
 
 
-def get_file_location(*, job_pk, values, slug):
-    # Where a job's output file will be located in the evaluation container
+def get_pred_file_path(*, job_pk, values, slug):
+    # Where a job's output file will be in the evaluation container
     relative_path = get_interface_relative_path(values=values, slug=slug)
     return INPUT_DIRECTORY / job_pk / "output" / relative_path
 
 
-def load_json_file(*, location):
-    # Reads a json file
-    with open(location) as f:
-        return json.loads(f.read())
+def load_from_gc_dir(*, gc_pred_dir: Path) -> sitk.Image:
+    """
+    From GC prediction directory loads the predicted mask
+    assumes there is only one .mha mask output file in gc_pred_dir
 
+    returns SimpleITK Image
+    """
+    gc_pred_file = rglob_files(gc_pred_dir, EXTENSIONS)[0]
 
-def load_image_file_as_array(*, location):
-    # Use SimpleITK to read a file
-    input_files = (
-        glob.glob(str(location / "*.tif"))
-        + glob.glob(str(location / "*.tiff"))
-        + glob.glob(str(location / "*.mha"))
-    )
-
-    result = SimpleITK.ReadImage(input_files[0])
-
-    # Convert it to a Numpy array
-    return SimpleITK.GetArrayFromImage(result)
+    return sitk.ReadImage(gc_pred_file)
 
 
 def write_metrics(*, metrics):
@@ -260,5 +313,46 @@ def write_json_file(*, location, content):
         f.write(json.dumps(content, indent=4))
 
 
+def rglob_files(folder, extensions):
+    """for non-docker local evaluation"""
+    return sorted(
+        [
+            f
+            for ext in extensions
+            for f in folder.rglob(ext)
+            if f.name != "predictions.json" and f.name != "inputs.json" and f.is_file()
+        ]
+    )
+
+
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--base_path",
+        type=lambda p: Path(p).absolute(),
+        default=Path(__file__).parent,
+        help=(
+            "(Optional) Specify the base directory containing "
+            "the predictions/ and ground-truth/ directories "
+            "for local non-Docker evaluation. "
+            "Defaults to the directory containing this script."
+        ),
+    )
+
+    args = parser.parse_args()
+
+    if EXEC_IN_DOCKER:
+        BASE_PATH = Path("/")
+    else:
+        BASE_PATH = args.base_path
+
+    print(f"BASE_PATH = {BASE_PATH}")
+
+    # output dir for the metrics.json file
+    OUTPUT_DIRECTORY = BASE_PATH / "output"
+
+    OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+
     raise SystemExit(main())
