@@ -1,6 +1,5 @@
-SimpleITK
-scipy
-
-numpy
-
-psutil
+numpy==1.25.2
+psutil==5.9.5
+pytest==8.3.2
+SimpleITK==2.2.1
+topbrain25_eval @ git+https://github.com/CoWBenchmark/TopBrain_Eval_Metrics.git@03ba48e47790609317916bacfea8904b596cd888
