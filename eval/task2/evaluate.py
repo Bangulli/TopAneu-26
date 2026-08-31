@@ -46,8 +46,8 @@ def load_gt(fn: Path, execute_in_docker: bool = True) -> sitk.Image:
     return sitk.ReadImage(str(gt_path))
 
 
-# NOTE: dice, iou, hd95 imported from topbrain25 evaluation.
-# volumetric similarity (vs) uses the same boilerplate as dice/iou
+# NOTE: dice and hd95 imported from topbrain25 evaluation.
+# volumetric similarity (vs) uses the same boilerplate as dice
 def vs_single_label(*, gt: sitk.Image, pred: sitk.Image, label: int) -> float:
     """
     SimpleITK's GetVolumeSimilarity() computes the volume difference

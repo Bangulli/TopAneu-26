@@ -6,7 +6,7 @@ Task 2 is a multi-class image segmentation task. Expected outputs are .segmented
 
 The metrics are divided into two categories: classification and segmentation metrics.
 
-The segmentation metrics (DICE, HD95, and VOLSIM) are computed for each class and averaged across images, ignoring NaN values. DICE and HD95 follow the same implementation as TopBrain 2025. Please refer to the test cases and individual metric documentation for further implementation details.
+The segmentation metrics (DICE, HD95, and VOLSIM) are computed for each class and averaged across images, ignoring NaN values. DICE and HD95 follow the same implementation as [TopBrain 2025 evaluation](https://github.com/CoWBenchmark/TopBrain_Eval_Metrics/tree/03ba48e47790609317916bacfea8904b596cd888). Please refer to the test cases and individual metric documentation for further implementation details.
 
 The segmentation masks are converted into detection counts (TP, TN, FP, FN) based on class presence with the ground-truth mask. These detection counts are then summed across all images.
 
