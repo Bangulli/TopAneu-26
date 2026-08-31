@@ -166,9 +166,11 @@ cython_debug/
 upload_to_archive/
 evaluation_method/
 
-# Ignore any actual images
+# Ignore any actual images, except for testing
 *.nii.gz
 *.mha
+!eval/task2/test_evaluations/**/*.nii.gz
+!eval/task2/test_evaluations/**/*.mha
 */input/
 TopAneu-26/
 *instance level/
@@ -176,3 +178,4 @@ TopAneu-26/
 eval/task1/ground_truth/
 eval/task2/ground_truth/
 TopAneu-26.zip
+*.bkp
