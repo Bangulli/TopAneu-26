@@ -1,0 +1,106 @@
+[
+  {
+    "pk": "pk_for_file1_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file1_cls_1-42-52_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-ct-angiography",
+          "relative_path": "images/head-ct-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "image": {
+          "pk": "file1_output_pk",
+          "name": "output.mha"
+        },
+        "socket": {
+          "slug": "aneurysm-segmentation",
+          "relative_path": "images/aneurysm-segmentation"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file2_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file2_cls_7_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-mr-angiography",
+          "relative_path": "images/head-mr-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "image": {
+          "pk": "file2_output_pk",
+          "name": "output.mha"
+        },
+        "socket": {
+          "slug": "aneurysm-segmentation",
+          "relative_path": "images/aneurysm-segmentation"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file3_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file3_cls_1-7-52_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-mr-angiography",
+          "relative_path": "images/head-mr-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "image": {
+          "pk": "file3_output_pk",
+          "name": "output.mha"
+        },
+        "socket": {
+          "slug": "aneurysm-segmentation",
+          "relative_path": "images/aneurysm-segmentation"
+        }
+      }
+    ]
+  },
+  {
+    "pk": "pk_for_file4_gt",
+    "inputs": [
+      {
+        "image": {
+          "name": "file4_cls_empty_gt_0000.mha"
+        },
+        "socket": {
+          "slug": "head-ct-angiography",
+          "relative_path": "images/head-ct-angio"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "image": {
+          "pk": "file4_output_pk",
+          "name": "output.mha"
+        },
+        "socket": {
+          "slug": "aneurysm-segmentation",
+          "relative_path": "images/aneurysm-segmentation"
+        }
+      }
+    ]
+  }
+]
