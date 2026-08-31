@@ -16,11 +16,11 @@ The classification metrics (Precision, Recall, and MCC) are computed for each cl
 
 For these *possible classes*={A, B, C, D, E, F}, a case with the following gt and pred will be converted to Task1-compatible location-lists of *gt*=[A, B, C, D] and *predictions*=[A, B, C, E], and the segmentation metrics will be:
 
-<img width="98%" alt="Task2 example case" src="task2example_seg.png" />
+<img width="68%" alt="Task2 example case" src="task2example_seg.png" />
 
 In this example, the most extreme metric values (i.e., the bounds) are reported as numerical values. Otherwise, "high" and "low" indicate relative values.
 
-This example is also documented in the test case `test_evaluation_function_readme_example()` from [task2's `test_evaluate.py`](eval/task2/test_evaluations/test_evaluate.py)
+This example is also documented in the test case `test_evaluation_function_readme_example()` from [`test_evaluate.py`](./test_evaluations/test_evaluate.py).
 
 ## Ranking
 
