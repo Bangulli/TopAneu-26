@@ -315,6 +315,7 @@ def test_main_e2e_averages(saved_metrics):
                     1,
                 ]
             ),
+            "count_valid_MCC": 3,
             # 3 non-nan PRECISION values
             "PRECISION": np.mean(
                 [
@@ -323,6 +324,7 @@ def test_main_e2e_averages(saved_metrics):
                     1,
                 ]
             ),
+            "count_valid_PRECISION": 3,
             # 4 non-nan RECALL values
             "RECALL": np.mean(
                 [
@@ -332,6 +334,7 @@ def test_main_e2e_averages(saved_metrics):
                     1,
                 ]
             ),
+            "count_valid_RECALL": 4,
             # 4 classes (1,7,42,52) have valid seg-metrics
             "DICE": np.mean(
                 [
@@ -341,6 +344,7 @@ def test_main_e2e_averages(saved_metrics):
                     (0.4 + 1) / 2,
                 ]
             ),
+            "count_valid_DICE": 4,
             "HD95": np.mean(
                 [
                     (290 * 3 + 1) / 4,
@@ -349,6 +353,7 @@ def test_main_e2e_averages(saved_metrics):
                     1.85 / 2,
                 ]
             ),
+            "count_valid_HD95": 4,
             "VOLSIM": np.mean(
                 [
                     0.857142857 / 4,
@@ -357,5 +362,6 @@ def test_main_e2e_averages(saved_metrics):
                     (0.4 + 1) / 2,
                 ]
             ),
+            "count_valid_VOLSIM": 4,
         }
     )

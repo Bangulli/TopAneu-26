@@ -614,11 +614,11 @@ def test_nanmean():
         aggregates[f"ZHAW_{i}"] = 10 * i
         aggregates[f"ETH_{i}"] = np.nan
 
-    assert nanmean(aggregates, "UZH") == 26.5 + 100
-    assert nanmean(aggregates, "ZHAW") == 26.5 * 10
+    assert nanmean(aggregates, "UZH") == (26.5 + 100, 52)
+    assert nanmean(aggregates, "ZHAW") == (26.5 * 10, 52)
     # for GC leaderboard table display, convert final nan to 0
-    assert not np.isnan(nanmean(aggregates, "ETH"))
-    assert nanmean(aggregates, "ETH") == 0
+    assert not np.isnan(nanmean(aggregates, "ETH")[0])
+    assert nanmean(aggregates, "ETH") == (0, 0)
 
 
 def test_evaluation_average_all_correct_pred(three_results):
@@ -631,12 +631,18 @@ def test_evaluation_average_all_correct_pred(three_results):
 
     assert macro == {
         "MCC": 0,
+        "count_valid_MCC": 0,
         "PRECISION": 1.0,
+        "count_valid_PRECISION": 3,
         "RECALL": 1.0,
+        "count_valid_RECALL": 3,
         # 3 classes (1,42,52) have valid seg-metrics
         "DICE": (1 + 1 + 1) / 3,
+        "count_valid_DICE": 3,
         "HD95": (0 + 0 + 0) / 3,
+        "count_valid_HD95": 3,
         "VOLSIM": (1 + 1 + 1) / 3,
+        "count_valid_VOLSIM": 3,
     }
 
 
@@ -652,10 +658,16 @@ def test_evaluation_average_3results(three_results):
 
     assert macro == {
         "MCC": 0,  # due to all NaN
+        "count_valid_MCC": 0,
         "PRECISION": (1 + 0 + 1 + 1) / 4,
+        "count_valid_PRECISION": 4,
         "RECALL": (1 / 3 + 2 / 3 + 2 / 3) / 3,
+        "count_valid_RECALL": 3,
         # 4 classes (1,7,42,52) have valid seg-metrics
         "DICE": (1 / 3 + 0 + 2 / 3 + 2 / 3) / 4,
+        "count_valid_DICE": 4,
         "HD95": (580 / 3 + 290 + 290 / 3 + 290 / 3) / 4,
+        "count_valid_HD95": 4,
         "VOLSIM": (1 / 3 + 0 + 2 / 3 + 2 / 3) / 4,
+        "count_valid_VOLSIM": 4,
     }

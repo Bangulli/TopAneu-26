@@ -191,8 +191,13 @@ def evaluation_aggregation(results: list):
     return aggregates
 
 
-def nanmean(aggregates, metric_name):
-    """return 0 for a metric with all nan for GC leaderboard"""
+def nanmean(aggregates, metric_name) -> tuple[float, int]:
+    """
+    Return the mean across valid class values and the number of valid classes.
+
+    NOTE: If the nanmean of a metric is still nan, ie no valid values,
+    for GC leaderboard display, convert the averaged nanmean from nan to 0
+    """
     values = np.asarray(
         [aggregates[f"{metric_name}_{i}"] for i in range(1, N_CLASSES + 1)]
     )
@@ -203,13 +208,15 @@ def nanmean(aggregates, metric_name):
 
     if not valid_values:
         print(f"[WARNING] {metric_name} contains all NaN")
-        return 0
+        return 0, 0
 
-    return np.mean(valid_values)
+    return np.mean(valid_values), len(valid_values)
 
 
 def evaluation_average(aggregates):
     """
+    Compute leaderboard averages and track valid class counts.
+
     The average reported here is across classes:
         Across images -> evaluation_aggregation()
         Across classes -> evaluation_average()
@@ -221,11 +228,11 @@ def evaluation_average(aggregates):
     for GC leaderboard display, convert the averaged nanmean to 0
     """
 
-    return {
-        "PRECISION": nanmean(aggregates, "PRECISION"),
-        "RECALL": nanmean(aggregates, "RECALL"),
-        "MCC": nanmean(aggregates, "MCC"),
-        "DICE": nanmean(aggregates, "DICE"),
-        "HD95": nanmean(aggregates, "HD95"),
-        "VOLSIM": nanmean(aggregates, "VOLSIM"),
-    }
+    cls_avg = {}
+
+    for metric in ["PRECISION", "RECALL", "MCC", "DICE", "HD95", "VOLSIM"]:
+        mean, count = nanmean(aggregates, metric)
+        cls_avg[metric] = mean
+        cls_avg[f"count_valid_{metric}"] = count
+
+    return cls_avg

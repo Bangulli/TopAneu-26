@@ -2253,11 +2253,17 @@
     },
     "aggregates_avg": {
         "PRECISION": 0.611111111111111,
+        "count_valid_PRECISION": 3,
         "RECALL": 0.5,
+        "count_valid_RECALL": 4,
         "MCC": 0.14088324360345805,
+        "count_valid_MCC": 3,
         "DICE": 0.2702380952380952,
+        "count_valid_DICE": 4,
         "HD95": 175.72566772451003,
-        "VOLSIM": 0.3119047619047619
+        "count_valid_HD95": 4,
+        "VOLSIM": 0.3119047619047619,
+        "count_valid_VOLSIM": 4
     },
     "n_cases": 4
 }
