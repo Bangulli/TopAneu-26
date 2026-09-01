@@ -201,6 +201,7 @@ def test_main_e2e_averages(saved_metrics):
                 1,
             ]
         ),
+        "count_valid_MCC": 3,
         # 3 non-nan PRECISION values
         "PRECISION": np.mean(
             [
@@ -209,6 +210,7 @@ def test_main_e2e_averages(saved_metrics):
                 1,
             ]
         ),
+        "count_valid_PRECISION": 3,
         # 4 non-nan RECALL values
         "RECALL": np.mean(
             [
@@ -218,4 +220,5 @@ def test_main_e2e_averages(saved_metrics):
                 1,
             ]
         ),
+        "count_valid_RECALL": 4,
     }

@@ -398,11 +398,11 @@ def test_nanmean():
         aggregates[f"ZHAW_{i}"] = 10 * i
         aggregates[f"ETH_{i}"] = np.nan
 
-    assert nanmean(aggregates, "UZH") == 26.5 + 100
-    assert nanmean(aggregates, "ZHAW") == 26.5 * 10
+    assert nanmean(aggregates, "UZH") == (26.5 + 100, 52)
+    assert nanmean(aggregates, "ZHAW") == (26.5 * 10, 52)
     # for GC leaderboard table display, convert final nan to 0
-    assert not np.isnan(nanmean(aggregates, "ETH"))
-    assert nanmean(aggregates, "ETH") == 0
+    assert not np.isnan(nanmean(aggregates, "ETH")[0])
+    assert nanmean(aggregates, "ETH") == (0, 0)
 
 
 def test_evaluation_average_all_correct_pred(three_results):
@@ -413,7 +413,14 @@ def test_evaluation_average_all_correct_pred(three_results):
 
     macro = evaluation_average(aggregates)
 
-    assert macro == {"MCC": 0, "PRECISION": 1.0, "RECALL": 1.0}
+    assert macro == {
+        "MCC": 0,
+        "count_valid_MCC": 0,
+        "PRECISION": 1.0,
+        "count_valid_PRECISION": 3,
+        "RECALL": 1.0,
+        "count_valid_RECALL": 3,
+    }
 
 
 def test_evaluation_average_3results(three_results):
@@ -428,6 +435,9 @@ def test_evaluation_average_3results(three_results):
 
     assert macro == {
         "MCC": 0,  # due to all NaN
+        "count_valid_MCC": 0,
         "PRECISION": (1 + 0 + 1 + 1) / 4,
+        "count_valid_PRECISION": 4,
         "RECALL": (1 / 3 + 2 / 3 + 2 / 3) / 3,
+        "count_valid_RECALL": 3,
     }
