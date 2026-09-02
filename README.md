@@ -1,18 +1,14 @@
-# 📦 TopAneu-26 Baselines, Submission Templates and Evaluation
-Thank you to the Grand Challenge Team for providing the basis of this repository!
+# 📦 TopAneu-26 Submission Templates and Evaluation
 
-## Content
+## Contents
 
 This repository contains templates to help you set up your submissions for the
-[TopAneu-26 challenge](https://topaneu-26.grand-challenge.org/).
-
+[TopAneu-26 challenge](https://topaneu-26.grand-challenge.org/), and the implementation of our evaluation metrics.
 
 It contains the following:
-* ️🦾 A template for _task 1_ to base your submissions on
-* ️🦾 A template for _task 2_ to base your submissions on
-* 🧮 The _evaluation methods_ used to evaluate your submissions and to generate performance
-  metrics for ranking 
-* 💾 The _dataset_ for the training is provided as sha256 hashes together with a convenient download script.
+* ️🦾 A template for _Task 1_ to base your submission on
+* ️🦾 A template for _Task 2_ to base your submission on
+* 🧮 The _evaluation methods_ used to evaluate your submissions and generate performance metrics for ranking
 
 ## Templates
 
@@ -42,64 +38,64 @@ bash [do_build/do_save/do_test_run].sh
 
 ### Expected container outputs
 
-#### Task1
-A json file containing the detected locations of the sample, formatted seen in the [Schema](Task1_output_json_schema.json). **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets. 
-**NOTE** The order of the values does not matter, though for human readability ascending order is recommended.
+#### Task 1: Multiclass aneurysm location classification
 
-#### Task2
-A 3D mask containing the (multi-)instance segmentations as provided in the `location_masks` in the training data, must fit the sample image dimensions!
+A json file containing the detected locations of the image, formatted as a list (see [schema](Task1_output_json_schema.json) for task 1 output).
+  * **NOTE** This is different from the json format the training data is provided as in `location_jsons` due to compatibility with existing Grand Challenge sockets. 
+  * **NOTE** The order of the values does not matter, though for human readability ascending order is recommended.
 
-## Data
-The data is hosted on [SWITCHDrive](https://drive.switch.ch/index.php/s/O36U43RkChkNcHd)
-The supplementary files as well as sha256 checksums for all images and masks in the dataset are provided in [topaneu_release](topaneu_release/)
-You can download the data and check the integrity using this short [script](utils/download.py) that will download the dataset to *TopAneu-26/* in the repository directory:
-```bash
-python utils/download.py
+#### Task 2: Multiclass aneurysm segmentation
+
+A 3D mask containing the multi-class aneurysm segmentations as provided in the `location_masks` in the training data.
+
+## Evaluation
+
+The evaluation methods, together with testing and documentation, are provided for each task in the [`eval`](eval/) folder.
+For more details on the methodology, see the README in the respective task folder.
+
+- [Task 1 Evaluation README](eval/task1/README.md)
+- [Task 2 Evaluation README](eval/task2/README.md)
+
+### Evaluate Locally
+
+For local evaluation, you can put the prediction and ground-truth files in two subdirectories
+`predictions/` and `ground-truth/`, **under the same parent directory**.
+Then, run `main.py` with the `--base_path` flag to get the evaluation results:
+
+```sh
+# from eval/task1 or eval/task2
+python3 main.py --base_path <parent_dir_of_gt_pred_subdirs>
+
+# example usage
+cd eval/task1 # or cd eval/task2
+python3 main.py --base_path ./test_evaluations/
 ```
-**NOTE** It requires an environment with the `requests` and `tqdm` libraries installed.
 
-## Evaluation Methods
-The evaluation methods together with simulated evaluations and results are provided for each task in [eval](eval/)
-Find more details of the methodology in the READMEs of the respective folder.
+Note: The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same order.
 
-The TL;DR is: 
-- Task one: Multiclass image location classification
-  - Expected outputs: Json files containing the predicted locations. (see [Schema](Task1_output_json_schema.json))
-  - Predicted labels (Pred) are compared to the ground truth (GT) and per-class metrics are computed for every sample and class: TP = label present in GT and Pred, FP = present in Pred not in GT, FN = Present in GT but not in Pred, TN = N labels in GT - (TP+FN).
-  - The TP, FP, TN, FN are accumulated over the whole testset and Precision, Recall and MCC are computed per class.
-  - For the ranking the Precision, Recall and MCC values are averaged across classes.
-- Task two: Image Segmentation
-  - Expected outputs: 3D segmentation masks with location labels.
-  - The GT and predicted masks are binarized for each class, a TP = IoU > 0, FN = Present in GT but not in Pred and not TP, an FP = present in Pred not in GT and not TP, TN = N labels in GT - (TP+FN).
-  - Segmentation is evaluated globally for the entire volume. The GT and Pred are binarized for every class and Dice, Volumetric Similarity (VS) and Haussdorff Distance 95th percentile (HD95) are computed per class per sample. **NOTE** In cases where there is a FP/FN segmentation the diagnoal of the volume is used as the worst possible value.
-
-### Run Locally
-Similar to the [Templates](#templates) bash scripts are provided to run the evaluation containers locally as they would be run on GC. If you want to run the evaluation locally you can prepare the data by placing the GT files in `./eval/task[1/2]/ground_truth/[location_jsons/location_masks]` and the predicted files in subdirectories in `./eval/task[1/2]/test/input/`. Notably the input subdiretories need to fit to the convention of the specific task and contain a `predictions.json` file to match the random UIDs to the GT data. For Task 1: `./eval/task1/test/input/[UID]/output/predicted-aneurysm-locations.json`; For Task 2: `./eval/task2/test/input/[UID]/output/images/aneurysm-segmentation/[UID].mha`. The `predictions.json` must map the UID to the actual filename of the sample image used to predict the output and is a list of prediction entries. Take a look at the `get_predictions_entry` function in the test scripts ([task1](eval/task1/test_evaluations/test.py), [task2](eval/task2/test_evaluations/test.py)) used to check the robustness of the methods.
-
+The evaluation results are saved as a JSON file at **`<parent_dir_of_gt_pred_subdirs>/output/metrics.json`**.
 
 ## Now What?
-To ensure a smooth start and avoid unnecessary frustration, it helps to first establish a
-successful baseline before making any significant changes to the provided examples.
 
-### Step 1: Run the Test Scripts
-Begin by using the provided test scripts to verify that the example templates work locally for both
-the example algorithm and example evaluation method.
+### Step 1: Develop your algorithm for either task
 
-### Step 2: Develop your method
-Develop your method and integrate it into the templates.
+Develop your method and integrate it into the [`templates`](./templates/).
 
-### Step 3: Save and Upload the Algorithm
+### Step 2: Evaluate your algorithm
+
+Evaluate locally the performance from [`eval`](./eval/).
+
+### Step 3: Submit the algorithm
+
 After successfully running the local test script, save the algorithm image: using the save script. On the platform: [create an algorithm](https://grand-challenge.org/documentation/create-an-algorithm-page/#creating-an-algorithm-for-a-challenge) and upload the algorithm image.
 
-### Step 4: Submit the Example Algorithm
 [Submit your algorithm image](https://topaneu-26.grand-challenge.org/evaluation/preliminary-docker-evaluation-sanity-check/submissions/create/) to the challenge.
 
-By following the steps above you will gain a solid understanding of the submission and evaluation process. This approach makes it much easier to identify and resolve any issues if something goes wrong later.
+## Extra resources
 
-## Miscellaneous
-
-You can find which ressources are available for your container at runtime [here](https://grand-challenge.org/documentation/runtime-environment/)
-If you have further questions about how to set up your container, or if you do not want to follow this template you can find more information [here](https://grand-challenge.org/documentation/algorithms/).
+You can find which resources are available for your container at runtime from [GC runtime-environment page](https://grand-challenge.org/documentation/runtime-environment/).
+If you have further questions about how to set up your container, or if you do not want to follow this template, you can find more information from [GC algorithms page](https://grand-challenge.org/documentation/algorithms/).
 
 ---
 Generated by [Grand Challenge](https://grand-challenge.org/), modified by the TopAneu team. (2f10252)
+We thank the Grand Challenge Team for providing the basis of this repository.

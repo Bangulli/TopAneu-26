@@ -21,6 +21,22 @@ def setup_logger(level=logging.INFO):
     )
 
 
+def is_docker():
+    """
+    check if main.py is run in a docker env
+
+    from https://stackoverflow.com/questions/43878953/how-does-one-detect-if-one-is-running-within-a-docker-container-within-python
+    """
+    cgroup = Path("/proc/self/cgroup")
+    exec_in_docker = (
+        Path("/.dockerenv").is_file()
+        or cgroup.is_file()
+        and "docker" in cgroup.read_text()
+    )
+    print(f"exec_in_docker? {exec_in_docker}")
+    return exec_in_docker
+
+
 class PredictionProcessingError(Exception):
     def __init__(
         self,
@@ -97,10 +113,18 @@ def run_prediction_processing(*, fn, predictions):
         results = manager.dict()
         errors = manager.dict()
 
+        max_workers = get_max_workers()
+        # print(
+        #     f"max_workers = {max_workers}, "
+        #     f"cpu_count = {multiprocessing.cpu_count()}, "
+        #     f"start_method = {multiprocessing.get_start_method()}, "
+        #     f"env = {os.getenv('GRAND_CHALLENGE_MAX_WORKERS')}"
+        # )
+
         pool_worker = _start_pool_worker(
             fn=fn,
             predictions=predictions,
-            max_workers=get_max_workers(),
+            max_workers=max_workers,
             results=results,
             errors=errors,
         )

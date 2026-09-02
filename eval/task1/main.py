@@ -1,7 +1,15 @@
 """
 The following is a simple example evaluation method.
 
-It is meant to run within a container. Its steps are as follows:
+You can run the evaluation locally outside of Docker environment.
+Outside of Docker, by default, main.py looks for files to evaluate in the current directory:
+in ./predictions/ and ./ground-truth/
+You can override this with any folder containing `ground-truth/` and `predictions/` sub-folders.
+The naming of gt and pred files can be arbitrary as long as their filenames are sorted in the same order.
+
+python3 main.py --base_path <parent_dir_of_gt_pred_subdirs>
+
+When run within a container. Its steps are as follows:
 
   1. Read the algorithm output
   2. Associate original algorithm inputs with a ground truths via predictions.json
@@ -10,14 +18,10 @@ It is meant to run within a container. Its steps are as follows:
   5. Aggregate the calculated metrics
   6. Save the metrics to metrics.json
 
-To run it locally, you can call the following bash script:
-
+(for organizers) Test for Docker environment
   ./do_test_run.sh
 
-This will start the evaluation and reads from ./test/input and writes to ./test/output
-
-To save the container and prep it for upload to Grand-Challenge.org you can call:
-
+(for organizers) To save the container and prep it for upload to Grand-Challenge.org you can call:
   ./do_save.sh
 
 Any container that shows the same behaviour will do, this is purely an example of how one COULD do it.
@@ -30,30 +34,81 @@ Happy programming!
 
 import json
 import logging
-import random
 from pathlib import Path
 from pprint import pformat
-from statistics import mean
-from evaluate import evaluation_function, evaluation_aggregation, evaluation_average
-from helpers import run_prediction_processing, setup_logger, tree
+
+from evaluate import evaluation_aggregation, evaluation_average, evaluation_function
+from helpers import is_docker, run_prediction_processing, setup_logger, tree
 
 logger = logging.getLogger("evaluate")
 
+# supported extensions for evaluation
+EXTENSIONS = ("*.json",)
 
-INPUT_DIRECTORY = Path("/input")
-OUTPUT_DIRECTORY = Path("/output")
+EXEC_IN_DOCKER = is_docker()
+
+if EXEC_IN_DOCKER:
+    # input dir with the predictions.json file for Docker env
+    # need to define here before the process interface functions
+    INPUT_DIRECTORY = Path("/input")
 
 
 def main():
-    setup_logger(
-        # Optionally: change this to the more verbose DEBUG
-        level=logging.INFO,
-    )
-
-    log_inputs()
-
     metrics = {}
-    predictions = read_predictions()
+
+    if EXEC_IN_DOCKER:
+        setup_logger(
+            # Optionally: change this to the more verbose DEBUG
+            level=logging.INFO,
+        )
+
+        log_inputs()
+
+        # fetch the predictions through predictions.json
+        predictions = read_predictions()
+
+        # Use concurrent workers to process the predictions more efficiently
+        metrics["results"] = run_prediction_processing(
+            fn=process, predictions=predictions
+        )
+    else:
+        # When not in docker environment, put gt and pred in these folders
+        # Make sure the gt/pred appear in the same sorted order
+        pred_dir = BASE_PATH / "predictions"
+        gt_dir = BASE_PATH / "ground-truth"
+
+        predictions = rglob_files(pred_dir, EXTENSIONS)
+        gts = rglob_files(gt_dir, EXTENSIONS)
+
+        print(f"predictions = {predictions}")
+        print(f"gts = {gts}")
+
+        assert len(predictions) > 0, "no prediction files"
+        assert len(gts) > 0, "no ground truth"
+
+        # early abort if num pred != gt files
+        assert len(gts) == len(predictions), "unequal gt & pred"
+
+        metrics["results"] = []
+
+        for i, gt_path in enumerate(gts):
+            print(f"i = {i}")
+            print(f"gt_path = {gt_path}")
+
+            pred_path = predictions[i]
+
+            print(f"pred_path = {pred_path}")
+
+            detected_aneurysm_locations = load_json_file(
+                path=pred_path,
+            )
+
+            result = evaluation_function(
+                detected_aneurysm_locations,
+                gt_path,
+                execute_in_docker=False,
+            )
+            metrics["results"].append(result)
 
     # We now process each algorithm job for this submission
     # Note that the jobs are not in any specific order!
@@ -92,14 +147,16 @@ def main():
     #
     # One, both or neither will be set.
 
-    # Use concurrent workers to process the predictions more efficiently
-    metrics["results"] = run_prediction_processing(fn=process, predictions=predictions)
-
     # We have the results per prediction, we can aggregate the results and
     # generate an overall score(s) for this submission
     if metrics["results"]:
-        metrics["aggregates_per_locations"] = evaluation_aggregation(metrics["results"])
-        metrics["aggregates_avg"] = evaluation_average(metrics["aggregates_per_locations"])
+        metrics["aggregates_per_location"] = evaluation_aggregation(metrics["results"])
+        metrics["aggregates_avg"] = evaluation_average(
+            metrics["aggregates_per_location"]
+        )
+
+        # document the number of test images
+        metrics["n_cases"] = len(metrics["results"])
 
     # Make sure to save the metrics
     write_metrics(metrics=metrics)
@@ -113,15 +170,15 @@ def process(job):
 
     # Lookup the handler for this particular set of sockets (i.e. the interface)
     handler = {
-        ("head-ct-angiography",): process_interf0,
-        ("head-mr-angiography",): process_interf1,
+        ("head-ct-angiography",): process_interf_ct,
+        ("head-mr-angiography",): process_interf_mr,
     }[interface_key]
 
     # Call the handler
     return handler(job)
 
 
-def process_interf0(
+def process_interf_ct(
     job,
 ):
     """Processes a single algorithm job, looking at the outputs"""
@@ -129,9 +186,9 @@ def process_interf0(
     report += pformat(job)
     report += "\n"
 
-    # Firstly, find the location of the results
+    # Firstly, find the path of the results
 
-    location_detected_aneurysm_locations = get_file_location(
+    path_detected_aneurysm_locations = get_pred_file_path(
         job_pk=job["pk"],
         values=job["outputs"],
         slug="detected-aneurysm-locations",
@@ -139,8 +196,8 @@ def process_interf0(
 
     # Secondly, read the results
 
-    result_detected_aneurysm_locations = load_json_file(
-        location=location_detected_aneurysm_locations,
+    detected_aneurysm_locations = load_json_file(
+        path=path_detected_aneurysm_locations,
     )
 
     # Thirdly, retrieve the input file name to match it with your ground truth
@@ -150,10 +207,13 @@ def process_interf0(
         slug="head-ct-angiography",
     )
 
-    return evaluation_function(result_detected_aneurysm_locations, image_name_head_ct_angiography)
+    return evaluation_function(
+        detected_aneurysm_locations,
+        image_name_head_ct_angiography,
+    )
 
 
-def process_interf1(
+def process_interf_mr(
     job,
 ):
     """Processes a single algorithm job, looking at the outputs"""
@@ -161,9 +221,9 @@ def process_interf1(
     report += pformat(job)
     report += "\n"
 
-    # Firstly, find the location of the results
+    # Firstly, find the path of the results
 
-    location_detected_aneurysm_locations = get_file_location(
+    path_detected_aneurysm_locations = get_pred_file_path(
         job_pk=job["pk"],
         values=job["outputs"],
         slug="detected-aneurysm-locations",
@@ -171,8 +231,8 @@ def process_interf1(
 
     # Secondly, read the results
 
-    result_detected_aneurysm_locations = load_json_file(
-        location=location_detected_aneurysm_locations,
+    detected_aneurysm_locations = load_json_file(
+        path=path_detected_aneurysm_locations,
     )
 
     # Thirdly, retrieve the input file name to match it with your ground truth
@@ -182,7 +242,10 @@ def process_interf1(
         slug="head-mr-angiography",
     )
 
-    return evaluation_function(result_detected_aneurysm_locations, image_name_head_mr_angiography)
+    return evaluation_function(
+        detected_aneurysm_locations,
+        image_name_head_mr_angiography,
+    )
 
 
 def log_inputs():
@@ -194,7 +257,8 @@ def log_inputs():
 
 def read_predictions():
     # The prediction file tells us the location of the users' predictions
-    return load_json_file(location=INPUT_DIRECTORY / "predictions.json")
+    with open(INPUT_DIRECTORY / "predictions.json") as f:
+        return json.loads(f.read())
 
 
 def get_interface_key(job):
@@ -221,16 +285,33 @@ def get_interface_relative_path(*, values, slug):
     raise RuntimeError(f"Value with interface {slug} not found!")
 
 
-def get_file_location(*, job_pk, values, slug):
-    # Where a job's output file will be located in the evaluation container
+def get_pred_file_path(*, job_pk, values, slug):
+    # Where a job's output file will be in the evaluation container
     relative_path = get_interface_relative_path(values=values, slug=slug)
     return INPUT_DIRECTORY / job_pk / "output" / relative_path
 
 
-def load_json_file(*, location):
-    # Reads a json file
-    with open(location) as f:
-        return json.loads(f.read())
+def load_json_file(*, path) -> list[int]:
+    """
+    compatible with both json of a naked list or nested json with `locations` key
+
+    Supports either:
+      [1, 2, 3]
+    or:
+      {"locations": [1, 2, 3]}
+
+    Returns the aneu locations list.
+    """
+    with open(path) as f:
+        data = json.load(f)
+
+    if isinstance(data, list):
+        return data
+
+    if isinstance(data, dict) and "locations" in data:
+        return data["locations"]
+
+    raise ValueError("Expected a list or an object containing a 'locations' key")
 
 
 def write_metrics(*, metrics):
@@ -244,5 +325,46 @@ def write_json_file(*, location, content):
         f.write(json.dumps(content, indent=4))
 
 
+def rglob_files(folder, extensions):
+    """for non-docker local evaluation"""
+    return sorted(
+        [
+            f
+            for ext in extensions
+            for f in folder.rglob(ext)
+            if f.name != "predictions.json" and f.name != "inputs.json" and f.is_file()
+        ]
+    )
+
+
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--base_path",
+        type=lambda p: Path(p).absolute(),
+        default=Path(__file__).parent,
+        help=(
+            "(Optional) Specify the base directory containing "
+            "the predictions/ and ground-truth/ directories "
+            "for local non-Docker evaluation. "
+            "Defaults to the directory containing this script."
+        ),
+    )
+
+    args = parser.parse_args()
+
+    if EXEC_IN_DOCKER:
+        BASE_PATH = Path("/")
+    else:
+        BASE_PATH = args.base_path
+
+    print(f"BASE_PATH = {BASE_PATH}")
+
+    # output dir for the metrics.json file
+    OUTPUT_DIRECTORY = BASE_PATH / "output"
+
+    OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+
     raise SystemExit(main())
