@@ -142,4 +142,4 @@ def check_topaneu_dir(dir, ignore_vessels=True):
         json.dump(report, f, indent=4)
 
 if __name__ == "__main__":
-    check_topaneu_dir(Path("TopAneu-26"), ignore_vessels=False)
+    check_topaneu_dir(Path("/home/tue20260926/tue/Documents/Datasets/TopAneu/Test"), ignore_vessels=True)
