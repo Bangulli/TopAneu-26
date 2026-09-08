@@ -473,14 +473,22 @@ def test_evaluation_aggregation_all_correct_pred(three_results):
 
         # Determine expected value
         if cls_id in {1, 42, 52}:
-            if metric in {"TP", "support", "PRECISION", "RECALL", "DICE", "VOLSIM"}:
+            if metric in {
+                "TP",
+                "support",
+                "PRECISION",
+                "RECALL",
+                "F1",
+                "DICE",
+                "VOLSIM",
+            }:
                 expected = 1
             elif metric == "MCC":
                 expected = np.nan
             else:
                 expected = 0
         else:
-            if metric in {"MCC", "PRECISION", "RECALL", "DICE", "HD95", "VOLSIM"}:
+            if metric in {"MCC", "PRECISION", "RECALL", "F1", "DICE", "HD95", "VOLSIM"}:
                 expected = np.nan
             elif metric == "TN":
                 expected = 1
@@ -536,6 +544,8 @@ def test_evaluation_aggregation_3results(three_results):
                 expected = 1 / (1 + 2)
             elif metric == "PRECISION":
                 expected = 1 / (1 + 0)
+            elif metric == "F1":
+                expected = 2 * 1 / (2 * 1 + 0 + 2)  # 0.5
             elif metric == "MCC":
                 expected = np.nan
             # seg metrics
@@ -574,6 +584,8 @@ def test_evaluation_aggregation_3results(three_results):
                 expected = 2 / (2 + 1)
             elif metric == "PRECISION":
                 expected = 2 / (2 + 0)
+            elif metric == "F1":
+                expected = 2 * 2 / (2 * 2 + 0 + 1)  # 0.8
             elif metric == "MCC":
                 expected = np.nan
             # seg metrics
@@ -587,7 +599,7 @@ def test_evaluation_aggregation_3results(three_results):
                 expected = 0
         # classes not from {1,7,42,52}
         else:
-            if metric in {"MCC", "PRECISION", "RECALL", "DICE", "HD95", "VOLSIM"}:
+            if metric in {"MCC", "PRECISION", "RECALL", "F1", "DICE", "HD95", "VOLSIM"}:
                 expected = np.nan
             elif metric == "TN":
                 expected = 3
@@ -630,12 +642,14 @@ def test_evaluation_average_all_correct_pred(three_results):
     macro = evaluation_average(aggregates)
 
     assert macro == {
-        "MCC": 0,
+        "MCC": 0,  # due to all NaN
         "count_valid_MCC": 0,
         "PRECISION": 1.0,
         "count_valid_PRECISION": 3,
         "RECALL": 1.0,
         "count_valid_RECALL": 3,
+        "F1": 1.0,
+        "count_valid_F1": 3,
         # 3 classes (1,42,52) have valid seg-metrics
         "DICE": (1 + 1 + 1) / 3,
         "count_valid_DICE": 3,
@@ -663,6 +677,8 @@ def test_evaluation_average_3results(three_results):
         "count_valid_PRECISION": 4,
         "RECALL": (1 / 3 + 2 / 3 + 2 / 3) / 3,
         "count_valid_RECALL": 3,
+        "F1": (0.5 + 0 + 4 / 5 + 4 / 5) / 4,  # 2.1/4 = 0.525
+        "count_valid_F1": 4,
         # 4 classes (1,7,42,52) have valid seg-metrics
         "DICE": (1 / 3 + 0 + 2 / 3 + 2 / 3) / 4,
         "count_valid_DICE": 4,
