@@ -1,11 +1,11 @@
 # TopAneu-26 Task 1 Evaluation
 
-Task 1 is a multi-label multi-class image classification task. Expected outputs are json files with the detected aneurysm location classes. Evaluation metrics are **Precision**, **Recall**, and **Matthews Correlation Coefficient (MCC)** for each class. Submissions are ranked by the average of these metrics across all classes, ignoring NaN values.
+Task 1 is a multi-label multi-class image classification task. Expected outputs are json files with the detected aneurysm location classes. Evaluation metrics are **Precision**, **Recall**, **F1**, and **Matthews Correlation Coefficient (MCC)** for each class. Submissions are ranked by the average of these metrics across all classes, ignoring NaN values.
 
 ## Method
 
 Detection counts (TP, TN, FP, FN) are summed across images for each location class.
-Then, precision, recall, and MCC are computed from the aggregated counts for each class (division-by-zero returns NaN).
+Then, precision, recall, F1, and MCC are computed from the aggregated counts for each class (division-by-zero returns NaN).
 
 **Example**:
 
@@ -28,6 +28,12 @@ $$
 
 $$
 \text{Recall} = \frac{TP}{TP + FN}
+$$
+
+**F1** is computed for every class using:
+
+$$
+\text{F1} = \frac{2 \times TP}{2 \times TP + FP + FN}
 $$
 
 **MCC** is computed for every class using:
