@@ -37,6 +37,8 @@ def check_result(result, *, tp=(), fn=(), fp=(), support=()):
         if key == "gt_filename":
             continue
 
+        print("Check detection result for", key)
+
         # Parse prefix (e.g. 'TP') and class_id (e.g. 1) from 'TP_1'
         metric, cls_str = key.rsplit("_", 1)
         cls_id = int(cls_str)

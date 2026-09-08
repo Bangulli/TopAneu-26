@@ -80,8 +80,10 @@ def check_result(result, *, tp=(), fn=(), fp=(), support=()):
     mentioned = tp | fn | fp | support
 
     for key, value in result.items():
-        if key not in {"TP", "FN", "FP", "TN", "support"}:
+        if not key.startswith(("TP", "FN", "FP", "TN", "support")):
             continue
+
+        print("Check detection result for", key)
 
         # Parse prefix (e.g. 'TP') and class_id (e.g. 1) from 'TP_1'
         metric, cls_str = key.rsplit("_", 1)
