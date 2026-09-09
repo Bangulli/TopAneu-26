@@ -1,6 +1,6 @@
 # TopAneu-26 Task 2 Evaluation
 
-Task 2 is a multi-class image segmentation task. Expected outputs are .segmented aneurysms with location classes. Evaluation metrics are **Precision**, **Recall**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DICE)**, **Hausdorff Distance 95th Percentile (HD95)**, and **Volumetric Similarity (VOLSIM)** for each class. Submissions are ranked by the average of these metrics across all classes, ignoring NaN values.
+Task 2 is a multi-class image segmentation task. Expected outputs are .segmented aneurysms with location classes. Evaluation metrics are **Precision**, **Recall**, **F1**, **Matthews Correlation Coefficient (MCC)**, **Dice Score (DICE)**, **Hausdorff Distance 95th Percentile (HD95)**, and **Volumetric Similarity (VOLSIM)** for each class. Submissions are ranked by the average of these metrics across all classes, ignoring NaN values.
 
 ## Method
 
@@ -10,7 +10,7 @@ The segmentation metrics (DICE, HD95, and VOLSIM) are computed for each class an
 
 The segmentation masks are converted into detection counts (TP, TN, FP, FN) based on class presence with the ground-truth mask. These detection counts are then summed across all images.
 
-The classification metrics (Precision, Recall, and MCC) are computed for each class from the aggregated detection counts, following the same procedure as Task 1. Division by zero results in NaN.
+The classification metrics (Precision, Recall, F1, and MCC) are computed for each class from the aggregated detection counts, following the same procedure as Task 1. Division by zero results in NaN.
 
 **Example**:
 

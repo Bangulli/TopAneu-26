@@ -37,6 +37,8 @@ def check_result(result, *, tp=(), fn=(), fp=(), support=()):
         if key == "gt_filename":
             continue
 
+        print("Check detection result for", key)
+
         # Parse prefix (e.g. 'TP') and class_id (e.g. 1) from 'TP_1'
         metric, cls_str = key.rsplit("_", 1)
         cls_id = int(cls_str)
@@ -132,6 +134,8 @@ def test_main_e2e_aggregates(saved_metrics):
                 expected = 1 / (1 + 1)
             elif metric == "PRECISION":
                 expected = 1 / (1 + 2)
+            elif metric == "F1":
+                expected = 2 * 1 / (2 * 1 + 2 + 1)  # 0.4
             elif metric == "MCC":
                 expected = (0 - 2) / math.sqrt(3 * 2 * 2 * 1)
             else:
@@ -145,6 +149,8 @@ def test_main_e2e_aggregates(saved_metrics):
                 expected = 1 / (1 + 1)
             elif metric == "PRECISION":
                 expected = 1 / (1 + 1)
+            elif metric == "F1":
+                expected = 2 * 1 / (2 * 1 + 1 + 1)  # 0.5
             elif metric == "MCC":
                 expected = (1 - 1) / math.sqrt(2 * 2 * 2 * 2)  # 0
             else:
@@ -169,12 +175,14 @@ def test_main_e2e_aggregates(saved_metrics):
                 expected = 2 / (2 + 0)
             elif metric == "PRECISION":
                 expected = 2 / (2 + 0)
+            elif metric == "F1":
+                expected = 1
             elif metric == "MCC":
                 expected = (4 - 0) / math.sqrt(2 * 2 * 2 * 2)  # 1
             else:
                 expected = 0
         else:
-            if metric in {"MCC", "PRECISION", "RECALL"}:
+            if metric in {"MCC", "PRECISION", "RECALL", "F1"}:
                 expected = np.nan
             elif metric == "TN":
                 expected = 4
@@ -221,4 +229,14 @@ def test_main_e2e_averages(saved_metrics):
             ]
         ),
         "count_valid_RECALL": 4,
+        # 4 non-nan F1 values
+        "F1": np.mean(
+            [
+                0.4,
+                0.5,
+                0,
+                1,
+            ]
+        ),
+        "count_valid_F1": 4,
     }

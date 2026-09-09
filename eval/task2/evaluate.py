@@ -177,6 +177,10 @@ def evaluation_aggregation(results: list):
         aggregates[f"PRECISION_{i}"] = tp / (tp + fp) if tp + fp else np.nan
         # recall = tp/(tp+fn)
         aggregates[f"RECALL_{i}"] = tp / (tp + fn) if tp + fn else np.nan
+        # f1 = 2 * tp / ((2 * tp) + fp + fn)
+        aggregates[f"F1_{i}"] = (
+            2 * tp / ((2 * tp) + fp + fn) if (tp + fp + fn) else np.nan
+        )
         # mcc = (tp*tn - fp*fn)/sqrt(...)
         mcc_num = tp * tn - fn * fp
         mcc_den = math.sqrt(
@@ -230,7 +234,7 @@ def evaluation_average(aggregates):
 
     cls_avg = {}
 
-    for metric in ["PRECISION", "RECALL", "MCC", "DICE", "HD95", "VOLSIM"]:
+    for metric in ["PRECISION", "RECALL", "F1", "MCC", "DICE", "HD95", "VOLSIM"]:
         mean, count = nanmean(aggregates, metric)
         cls_avg[metric] = mean
         cls_avg[f"count_valid_{metric}"] = count
